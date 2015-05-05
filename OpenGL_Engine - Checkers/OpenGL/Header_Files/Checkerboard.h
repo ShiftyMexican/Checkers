@@ -34,6 +34,8 @@ public:
 
 	void ColourSwitch();
 
+	void AddBoardPiece(int id, float xPos, float zPos, bool colour);
+
 private:
 	static const unsigned int BOARD_WIDTH = 8;
 
@@ -44,10 +46,16 @@ private:
 
 	glm::vec3 m_boardPieceCenter;
 
+	std::vector<BoardPiece*> m_boardpieces;
+
 	float m_xOffset;
 	float m_yOffset;
 
+	float m_pieceID;
+
 	float m_iterations;
+
+	bool m_isBlack;
 
 	BoardPiece* m_boardpiece;
 

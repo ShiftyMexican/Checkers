@@ -19,10 +19,20 @@
 class BoardPiece
 {
 public:
-	BoardPiece();
+	BoardPiece(int id, float xPos, float zPos, bool isBlack);
 	~BoardPiece();
 
+	void Update();
+
+	void ColourSwitch();
+
 	glm::mat4* m_blockMatrix;
+
+	glm::vec4 m_black;
+	glm::vec4 m_white;
+	glm::vec4 m_currentColour;
+
+	float m_id;
 
 	float m_width;
 	float m_height;
@@ -31,6 +41,8 @@ public:
 	bool m_isWhite;
 
 	bool m_isOccupied;
+
+	glm::vec3 m_position;
 
 private:
 
