@@ -12,6 +12,7 @@ BoardPiece::BoardPiece()
 	m_height = 10.0f;
 
 	m_isBlack = true;
+	m_isOccupied = false;
 	m_isWhite = false;
 }
 

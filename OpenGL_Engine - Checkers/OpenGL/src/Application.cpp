@@ -19,7 +19,7 @@ Application::Application()
 	// Initialization for the Free Camera ---------------------------------------
 	myCamera = new FreeCamera(window);
 	myCamera->SetupPerspective(glm::pi<float>() * 0.25f ,1240.0f / 768.0f);
-	myCamera->LookAt(vec3(1000, 1000, 1000), vec3(0), vec3(0, 1, 0));
+	myCamera->LookAt(vec3(40, 0, 40), vec3(0), vec3(0, 1, 0));
 	myCamera->SetFlySpeed(1000.0f);
 	//---------------------------------------------------------------------------
 

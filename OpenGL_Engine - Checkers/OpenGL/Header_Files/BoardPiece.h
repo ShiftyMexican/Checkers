@@ -30,6 +30,8 @@ public:
 	bool m_isBlack;
 	bool m_isWhite;
 
+	bool m_isOccupied;
+
 private:
 
 

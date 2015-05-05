@@ -12,6 +12,7 @@
 #include <Gizmos.h>
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -40,6 +41,8 @@ private:
 	glm::vec4 m_white;
 
 	glm::vec4 m_currentColour;
+
+	glm::vec3 m_boardPieceCenter;
 
 	float m_xOffset;
 	float m_yOffset;
