@@ -22,7 +22,7 @@ class BoardPiece;
 class Checkerboard
 {
 public:
-	Checkerboard();
+	Checkerboard(GLFWwindow* window);
 
 	~Checkerboard();
 
@@ -34,14 +34,13 @@ public:
 
 	void ColourSwitch();
 
-	void AddBoardPiece(int id, float xPos, float zPos, bool colour);
+	void AddBoardPiece(int id, float xPos, float zPos, bool colour, bool occupied);
 
 private:
 	static const unsigned int BOARD_WIDTH = 8;
 
 	glm::vec4 m_black;
 	glm::vec4 m_white;
-
 	glm::vec4 m_currentColour;
 
 	glm::vec3 m_boardPieceCenter;
@@ -52,14 +51,12 @@ private:
 	float m_yOffset;
 
 	float m_pieceID;
-
 	float m_iterations;
 
 	bool m_isBlack;
+	bool m_occupied;
 
-	BoardPiece* m_boardpiece;
-
-
+	GLFWwindow* m_window;
 };
 
 #endif

@@ -19,7 +19,7 @@
 class BoardPiece
 {
 public:
-	BoardPiece(int id, float xPos, float zPos, bool isBlack);
+	BoardPiece(int id, float xPos, float zPos, bool isBlack, bool occupied);
 	~BoardPiece();
 
 	void Update();
@@ -32,17 +32,18 @@ public:
 	glm::vec4 m_white;
 	glm::vec4 m_currentColour;
 
-	float m_id;
+	glm::vec3 m_position;
 
+	float m_id;
 	float m_width;
 	float m_height;
 
 	bool m_isBlack;
-	bool m_isWhite;
-
 	bool m_isOccupied;
+	bool m_isPurple;
+	bool m_isGreen;
 
-	glm::vec3 m_position;
+
 
 private:
 

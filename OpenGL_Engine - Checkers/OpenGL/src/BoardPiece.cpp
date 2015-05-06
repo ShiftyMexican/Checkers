@@ -1,6 +1,6 @@
 #include "BoardPiece.h"
 
-BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack)
+BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack, bool occupied)
 {
 	m_blockMatrix = new glm::mat4(
 		1, 0, 0, 1,
@@ -12,7 +12,9 @@ BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack)
 	m_height = 10.0f;
 
 	m_isBlack = isBlack;
-	m_isOccupied = false;
+	m_isOccupied = occupied;
+	m_isPurple = false;
+	m_isGreen = false;
 
 	m_position = glm::vec3(xPos, 1, zPos);
 
@@ -26,6 +28,11 @@ BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack)
 		m_currentColour = m_black;
 	else
 		m_currentColour = m_white;
+
+	if (m_isOccupied == true && m_id < 24)
+		m_isGreen = true;
+	else if (m_isOccupied == true && m_id > 39)
+		m_isPurple = true;
 
 }
 
@@ -46,7 +53,7 @@ void BoardPiece::ColourSwitch()
 		m_currentColour = m_black;
 	}
 
-	else if (m_isWhite == true)
+	else if (m_isBlack == false)
 	{
 		m_currentColour = m_white;
 	}
