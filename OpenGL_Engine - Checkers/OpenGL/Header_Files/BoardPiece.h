@@ -43,8 +43,6 @@ public:
 	bool m_isPurple;
 	bool m_isGreen;
 
-
-
 private:
 
 

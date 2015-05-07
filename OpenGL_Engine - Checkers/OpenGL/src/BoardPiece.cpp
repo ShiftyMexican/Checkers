@@ -33,7 +33,6 @@ BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack, bool occupi
 		m_isGreen = true;
 	else if (m_isOccupied == true && m_id > 39)
 		m_isPurple = true;
-
 }
 
 BoardPiece::~BoardPiece()
@@ -57,6 +56,4 @@ void BoardPiece::ColourSwitch()
 	{
 		m_currentColour = m_white;
 	}
-
-
 }
