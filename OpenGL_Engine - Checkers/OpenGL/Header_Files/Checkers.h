@@ -45,6 +45,8 @@ private:
 
 	POINT mousepos;
 
+	bool m_clicked;
+
 };
 
 #endif

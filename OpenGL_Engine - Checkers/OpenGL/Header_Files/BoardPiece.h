@@ -34,7 +34,7 @@ public:
 
 	glm::vec3 m_position;
 
-	float m_id;
+	int m_id;
 	float m_width;
 	float m_height;
 
@@ -42,6 +42,8 @@ public:
 	bool m_isOccupied;
 	bool m_isPurple;
 	bool m_isGreen;
+	bool m_isSelected;
+	bool m_isPossibleMove;
 
 private:
 

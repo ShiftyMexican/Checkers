@@ -15,6 +15,8 @@ BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack, bool occupi
 	m_isOccupied = occupied;
 	m_isPurple = false;
 	m_isGreen = false;
+	m_isSelected = false;
+	m_isPossibleMove = false;
 
 	m_position = glm::vec3(xPos, 1, zPos);
 
@@ -29,10 +31,18 @@ BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack, bool occupi
 	else
 		m_currentColour = m_white;
 
+	if (m_isBlack == false)
+	{
+		if (m_id < 24 || m_id > 39)
+			m_isOccupied = true;
+	}
+
 	if (m_isOccupied == true && m_id < 24)
 		m_isGreen = true;
 	else if (m_isOccupied == true && m_id > 39)
 		m_isPurple = true;
+
+	
 }
 
 BoardPiece::~BoardPiece()

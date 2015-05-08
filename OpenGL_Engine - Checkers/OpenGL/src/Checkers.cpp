@@ -13,6 +13,8 @@ Checkers::Checkers(GLFWwindow* window)
 
 	m_window = window;
 
+	m_clicked = false;
+
 	m_checkerBoard = new Checkerboard(window);
 }
 
@@ -26,17 +28,19 @@ void Checkers::Update(float deltaTime)
 	double xPos, yPos;
 
 	glfwGetCursorPos(m_window, &xPos, &yPos);
-	//if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-	//{
-		vec3 Tileloc = m_camera->pickAgainstPlane(xPos, yPos, vec4(0, 1, 0, 0));
+	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && m_clicked == false)
+	{
+		vec3 Tileloc = m_camera->pickAgainstPlane((float)xPos, (float)yPos, vec4(0, 1, 0, 0));
 		m_tempMousePos = Tileloc;
-		//std::cout << "Mouse Position x: " << m_tempMousePos.x << " Position z:" << m_tempMousePos.z << "\n";
-	//}
-
-		
+	}
 
 	m_camera->Update(deltaTime);
 	m_checkerBoard->Update(m_tempMousePos);
+
+	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		m_clicked = true;
+	else
+		m_clicked = false;
 }
 
 void Checkers::Draw()

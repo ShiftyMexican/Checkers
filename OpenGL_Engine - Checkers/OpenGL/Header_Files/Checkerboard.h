@@ -55,6 +55,7 @@ private:
 
 	bool m_isBlack;
 	bool m_occupied;
+	bool m_clicked;
 
 	GLFWwindow* m_window;
 };

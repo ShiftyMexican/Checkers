@@ -20,6 +20,8 @@ Checkerboard::Checkerboard(GLFWwindow* window)
 
 	m_occupied = false;
 
+	m_clicked = false;
+
 	m_window = window;
 
 	CreateCheckersBoard();
@@ -34,25 +36,49 @@ void Checkerboard::Update(glm::vec3 position)
 {
 	for (auto itr = m_boardpieces.begin(); itr != m_boardpieces.end(); itr++)
 	{
-		if (position.x <= (*itr)->m_position.x + 10 && position.x >= (*itr)->m_position.x - 10 
-			&& position.z <= (*itr)->m_position.z + 10 && position.z >= (*itr)->m_position.z - 10)
+		if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && m_clicked != true &&
+			position.x <= (*itr)->m_position.x + 10 && position.x >= (*itr)->m_position.x - 10 && 
+			position.z <= (*itr)->m_position.z + 10 && position.z >= (*itr)->m_position.z - 10)
 		{
-			std::cout << "Piece ID: " << (*itr)->m_id << "\n";
+			if ((*itr)->m_isOccupied == true && (*itr)->m_isSelected == false)
+			{
+				(*itr)->m_isSelected = true;
+				if (m_boardpieces[((*itr)->m_id + 7)]->m_isBlack == false && m_boardpieces[((*itr)->m_id + 7)]->m_isOccupied == false)
+					m_boardpieces[((*itr)->m_id + 7)]->m_isPossibleMove = true;
+				if (m_boardpieces[((*itr)->m_id + 9)]->m_isBlack == false && m_boardpieces[((*itr)->m_id + 9)]->m_isOccupied == false)
+					m_boardpieces[((*itr)->m_id + 9)]->m_isPossibleMove = true;
+			}
+			else if ((*itr)->m_isOccupied == true && (*itr)->m_isSelected == true)
+			{
+				(*itr)->m_isSelected = false;
+				m_boardpieces[((*itr)->m_id + 7)]->m_isPossibleMove = false;
+				m_boardpieces[((*itr)->m_id + 9)]->m_isPossibleMove = false;
+			}
+			else
+				break;
 		}
 	}
+	
+	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		m_clicked = true;
+	else
+		m_clicked = false;
 
-	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
-		m_boardpieces[28]->m_isOccupied = true;
-		m_boardpieces[28]->m_isPurple = true;
-	}
 }
 
 void Checkerboard::Draw()
 {
 	for (auto itr = m_boardpieces.begin(); itr != m_boardpieces.end(); itr++)
 	{
-		Gizmos::addAABBFilled((*itr)->m_position, glm::vec3((*itr)->m_width, 2, (*itr)->m_height), (*itr)->m_currentColour, nullptr);
+		if ((*itr)->m_isSelected == false && (*itr)->m_isPossibleMove == false)
+		{
+			Gizmos::addAABBFilled((*itr)->m_position, glm::vec3((*itr)->m_width, 2, (*itr)->m_height), (*itr)->m_currentColour, nullptr);
+		}
+
+		else if ((*itr)->m_isSelected == true)
+		{
+			Gizmos::addAABBFilled((*itr)->m_position, glm::vec3((*itr)->m_width, 2, (*itr)->m_height), glm::vec4(1, 0, 0, 1) , nullptr);
+		}
 
 		if ((*itr)->m_isOccupied == true && (*itr)->m_isGreen == true)
 		{
@@ -62,6 +88,11 @@ void Checkerboard::Draw()
 		if ((*itr)->m_isOccupied == true && (*itr)->m_isPurple == true)
 		{
 			Gizmos::addCylinderFilled(glm::vec3((*itr)->m_position.x, 5, (*itr)->m_position.z), 0.8 * (*itr)->m_width, 2, 20, glm::vec4(0.6, 0, 1, 1), nullptr);
+		}
+
+		if ((*itr)->m_isPossibleMove == true)
+		{
+			Gizmos::addAABBFilled((*itr)->m_position, glm::vec3((*itr)->m_width, 2, (*itr)->m_height), glm::vec4(1, 0.35, 0, 1), nullptr);
 		}
 	}
 }
@@ -95,13 +126,14 @@ void Checkerboard::ColourSwitch()
 	if (m_isBlack == true && m_iterations < 8)
 	{
 		m_isBlack = false;
-		m_occupied = true;
+		//m_occupied = true;
 	}
 		
 
 	else if (m_isBlack == false && m_iterations < 8)
 	{
 		m_isBlack = true;
+		//m_occupied = true;
 
 		if (m_pieceID < 24 || m_pieceID > 39)
 			m_occupied = false;
