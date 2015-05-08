@@ -26,7 +26,7 @@ public:
 
 	~Checkerboard();
 
-	void Update();
+	void Update(glm::vec3 position);
 
 	void Draw();
 

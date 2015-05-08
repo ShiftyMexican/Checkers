@@ -39,6 +39,12 @@ private:
 
 	Checkerboard* m_checkerBoard;
 
+	GLFWwindow* m_window;
+
+	glm::vec3 m_tempMousePos;
+
+	POINT mousepos;
+
 };
 
 #endif

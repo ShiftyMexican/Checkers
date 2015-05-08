@@ -30,8 +30,17 @@ Checkerboard::~Checkerboard()
 
 }
 
-void Checkerboard::Update()
+void Checkerboard::Update(glm::vec3 position)
 {
+	for (auto itr = m_boardpieces.begin(); itr != m_boardpieces.end(); itr++)
+	{
+		if (position.x <= (*itr)->m_position.x + 10 && position.x >= (*itr)->m_position.x - 10 
+			&& position.z <= (*itr)->m_position.z + 10 && position.z >= (*itr)->m_position.z - 10)
+		{
+			std::cout << "Piece ID: " << (*itr)->m_id << "\n";
+		}
+	}
+
 	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		m_boardpieces[28]->m_isOccupied = true;

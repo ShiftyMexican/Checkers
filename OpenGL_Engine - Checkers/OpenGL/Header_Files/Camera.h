@@ -46,6 +46,8 @@ public:
 	const glm::mat4& GetView() const { return m_viewTransform; }
 	const glm::mat4& GetProjectionView() const { return m_projectionViewTransform; }
 
+	glm::vec3 pickAgainstPlane(float x, float y, const glm::vec4& plane) const;
+
 	bool GetPerspectiveSet() const { return m_bPerspectiveSet;  }
 	
 protected:
