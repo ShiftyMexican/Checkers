@@ -36,6 +36,10 @@ public:
 
 	void AddBoardPiece(int id, float xPos, float zPos, bool colour, bool occupied);
 
+	void SetGreenPossibleMoves(BoardPiece* itr);
+
+	void SetPurplePossibleMoves(BoardPiece* itr);
+
 private:
 	static const unsigned int BOARD_WIDTH = 8;
 
@@ -52,6 +56,8 @@ private:
 
 	float m_pieceID;
 	float m_iterations;
+
+	int m_selectedPieceID;
 
 	bool m_isBlack;
 	bool m_occupied;

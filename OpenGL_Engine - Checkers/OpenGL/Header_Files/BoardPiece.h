@@ -12,6 +12,7 @@
 #include <Gizmos.h>
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
