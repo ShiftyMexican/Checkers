@@ -61,12 +61,9 @@ void Checkerboard::Update(glm::vec3 position)
 			// If piece is clicked again deselect it
 			else if ((*itr)->m_isOccupied == true && (*itr)->m_isSelected == true && (*itr)->m_id == m_selectedPieceID)
 			{
-				(*itr)->m_isSelected = false;
-				m_boardpieces[((*itr)->m_id + 7)]->m_isPossibleMove = false;
-				m_boardpieces[((*itr)->m_id + 9)]->m_isPossibleMove = false;
-				m_selectedPieceID = NULL;
+				ResetPossible((*itr));
 			}
-
+			
 			// If youve clicked the possible move, move the piece
 			else if ((*itr)->m_isPossibleMove == true)
 			{
@@ -187,22 +184,51 @@ void Checkerboard::SetGreenPossibleMoves(BoardPiece* itr)
 {
 	itr->m_isSelected = true;
 
-	// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
-	if (m_boardpieces[(itr->m_id + 7)]->m_isBlack == false && m_boardpieces[(itr->m_id + 7)]->m_isOccupied == false)
-		m_boardpieces[(itr->m_id + 7)]->m_isPossibleMove = true;
+	if ((itr->m_id + 7) <= m_boardpieces.size())
+	{
+		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
+		if (m_boardpieces[(itr->m_id + 7)]->m_isBlack == false && m_boardpieces[(itr->m_id + 7)]->m_isOccupied == false)
+			m_boardpieces[(itr->m_id + 7)]->m_isPossibleMove = true;
+	}
 
-	if (m_boardpieces[(itr->m_id + 9)]->m_isBlack == false && m_boardpieces[(itr->m_id + 9)]->m_isOccupied == false)
-		m_boardpieces[(itr->m_id + 9)]->m_isPossibleMove = true;
+
+	if ((itr->m_id + 9) <= m_boardpieces.size())
+	{
+		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
+		if (m_boardpieces[(itr->m_id + 9)]->m_isBlack == false && m_boardpieces[(itr->m_id + 9)]->m_isOccupied == false)
+			m_boardpieces[(itr->m_id + 9)]->m_isPossibleMove = true;
+	}
+
 }
+
 void Checkerboard::SetPurplePossibleMoves(BoardPiece* itr)
 {
 	itr->m_isSelected = true;
+	if ((itr->m_id - 7) >= 0)
+	{
+		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
+		if (m_boardpieces[(itr->m_id - 7)]->m_isBlack == false && m_boardpieces[(itr->m_id - 7)]->m_isOccupied == false)
+			m_boardpieces[(itr->m_id - 7)]->m_isPossibleMove = true;
+	}
 
-	// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
-	if (m_boardpieces[(itr->m_id - 7)]->m_isBlack == false && m_boardpieces[(itr->m_id - 7)]->m_isOccupied == false)
-		m_boardpieces[(itr->m_id - 7)]->m_isPossibleMove = true;
+	if ((itr->m_id - 9) >= 0)
+	{
+		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
+		if (m_boardpieces[(itr->m_id - 9)]->m_isBlack == false && m_boardpieces[(itr->m_id - 9)]->m_isOccupied == false)
+			m_boardpieces[(itr->m_id - 9)]->m_isPossibleMove = true;
+	}
+}
 
-	if (m_boardpieces[(itr->m_id - 9)]->m_isBlack == false && m_boardpieces[(itr->m_id - 9)]->m_isOccupied == false)
-		m_boardpieces[(itr->m_id - 9)]->m_isPossibleMove = true;
+void Checkerboard::ResetPossible(BoardPiece* itr)
+{
+	itr->m_isSelected = false;
+
+	if ((itr->m_id + 7) <= m_boardpieces.size())
+		m_boardpieces[(itr->m_id + 7)]->m_isPossibleMove = false;
+
+	if ((itr->m_id + 9) <= m_boardpieces.size())
+		m_boardpieces[(itr->m_id + 9)]->m_isPossibleMove = false;
+
+	m_selectedPieceID = NULL;
 }
 

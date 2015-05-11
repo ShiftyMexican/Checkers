@@ -40,6 +40,8 @@ public:
 
 	void SetPurplePossibleMoves(BoardPiece* itr);
 
+	void ResetPossible(BoardPiece* itr);
+
 private:
 	static const unsigned int BOARD_WIDTH = 8;
 
