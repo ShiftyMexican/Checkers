@@ -73,6 +73,34 @@ void Checkerboard::Update(glm::vec3 position)
 				m_boardpieces[m_selectedPieceID]->m_isSelected = false;
 				m_boardpieces[m_selectedPieceID]->m_isOccupied = false;
 
+				if (m_canKillGreen7 == true)
+				{
+					m_boardpieces[m_selectedPieceID - 7]->m_isOccupied = false;
+					m_boardpieces[m_selectedPieceID - 7]->m_isGreen = false;
+					m_canKillGreen7 = false;
+				}
+
+				else if (m_canKillPurple7 == true)
+				{
+					m_boardpieces[m_selectedPieceID + 7]->m_isOccupied = false;
+					m_boardpieces[m_selectedPieceID + 7]->m_isPurple = false;
+					m_canKillPurple7 = false;
+				}
+
+				else if (m_canKillGreen9 == true)
+				{
+					m_boardpieces[m_selectedPieceID - 9]->m_isOccupied = false;
+					m_boardpieces[m_selectedPieceID - 9]->m_isGreen = false;
+					m_canKillGreen9 = false;
+				}
+
+				else if (m_canKillPurple9 == true)
+				{
+					m_boardpieces[m_selectedPieceID + 9]->m_isOccupied = false;
+					m_boardpieces[m_selectedPieceID + 9]->m_isPurple = false;
+					m_canKillPurple9 = false;
+				}
+
 				m_selectedPieceID = NULL;
 				
 				for (auto iter = m_boardpieces.begin(); iter != m_boardpieces.end(); iter++)
@@ -194,8 +222,12 @@ void Checkerboard::SetGreenPossibleMoves(BoardPiece* itr)
 		{
 			if (m_boardpieces[(itr->m_id + 7)]->m_isOccupied == true && m_boardpieces[(itr->m_id + 7)]->m_isPurple == true)
 			{
-				if (m_boardpieces[(itr->m_id + 14)]->m_isOccupied == false)
-				m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = true;
+				if (m_boardpieces[(itr->m_id + 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 14)]->m_isBlack == false)
+				{
+					m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = true;
+					m_canKillPurple7 = true;
+				}
+				
 			}
 		}
 	}
@@ -211,8 +243,12 @@ void Checkerboard::SetGreenPossibleMoves(BoardPiece* itr)
 		{
 			if (m_boardpieces[(itr->m_id + 9)]->m_isOccupied == true && m_boardpieces[(itr->m_id + 9)]->m_isPurple == true)
 			{
-				if (m_boardpieces[(itr->m_id + 18)]->m_isOccupied == false)
+				if (m_boardpieces[(itr->m_id + 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 18)]->m_isBlack == false)
+				{
 					m_boardpieces[(itr->m_id + 18)]->m_isPossibleMove = true;
+					m_canKillPurple9 = true;
+				}
+					
 			}
 		}
 
@@ -233,8 +269,11 @@ void Checkerboard::SetPurplePossibleMoves(BoardPiece* itr)
 		{
 			if (m_boardpieces[(itr->m_id - 7)]->m_isOccupied == true && m_boardpieces[(itr->m_id - 7)]->m_isGreen == true)
 			{
-				if (m_boardpieces[(itr->m_id - 14)]->m_isOccupied == false)
+				if (m_boardpieces[(itr->m_id - 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 14)]->m_isBlack == false)
+				{
 					m_boardpieces[(itr->m_id - 14)]->m_isPossibleMove = true;
+					m_canKillGreen7 = true;
+				}	
 			}
 		}
 	}
@@ -249,8 +288,11 @@ void Checkerboard::SetPurplePossibleMoves(BoardPiece* itr)
 		{
 			if (m_boardpieces[(itr->m_id - 9)]->m_isOccupied == true && m_boardpieces[(itr->m_id - 9)]->m_isGreen == true)
 			{
-				if (m_boardpieces[(itr->m_id - 18)]->m_isOccupied == false)
+				if (m_boardpieces[(itr->m_id - 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 18)]->m_isBlack == false)
+				{
 					m_boardpieces[(itr->m_id - 18)]->m_isPossibleMove = true;
+					m_canKillGreen9 = true;
+				}
 			}
 		}
 	}
@@ -267,6 +309,12 @@ void Checkerboard::ResetPossible(BoardPiece* itr)
 
 		if ((itr->m_id + 9) <= m_boardpieces.size())
 			m_boardpieces[(itr->m_id + 9)]->m_isPossibleMove = false;
+
+		if ((itr->m_id + 14) <= m_boardpieces.size())
+			m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = false;
+
+		if ((itr->m_id + 18) <= m_boardpieces.size())
+			m_boardpieces[(itr->m_id + 18)]->m_isPossibleMove = false;
 	}
 
 	else if (itr->m_isPurple == true)
@@ -276,6 +324,12 @@ void Checkerboard::ResetPossible(BoardPiece* itr)
 
 		if ((itr->m_id - 9) <= m_boardpieces.size())
 			m_boardpieces[(itr->m_id - 9)]->m_isPossibleMove = false;
+
+		if ((itr->m_id - 14) <= m_boardpieces.size())
+			m_boardpieces[(itr->m_id - 14)]->m_isPossibleMove = false;
+
+		if ((itr->m_id - 18) <= m_boardpieces.size())
+			m_boardpieces[(itr->m_id - 18)]->m_isPossibleMove = false;
 	}
 
 

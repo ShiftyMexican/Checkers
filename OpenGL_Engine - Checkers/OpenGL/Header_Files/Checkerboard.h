@@ -64,6 +64,10 @@ private:
 	bool m_isBlack;
 	bool m_occupied;
 	bool m_clicked;
+	bool m_canKillGreen7;
+	bool m_canKillPurple7;
+	bool m_canKillGreen9;
+	bool m_canKillPurple9;
 
 	GLFWwindow* m_window;
 };
