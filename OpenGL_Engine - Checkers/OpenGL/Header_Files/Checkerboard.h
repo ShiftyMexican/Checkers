@@ -42,6 +42,11 @@ public:
 
 	void ResetPossible(BoardPiece* itr);
 
+	void SetMove(BoardPiece* itr);
+	void CheckForPurpleKill(BoardPiece* itr);
+	void CheckForGreenKill(BoardPiece* itr);
+
+
 private:
 	static const unsigned int BOARD_WIDTH = 8;
 
@@ -68,6 +73,9 @@ private:
 	bool m_canKillPurple7;
 	bool m_canKillGreen9;
 	bool m_canKillPurple9;
+	bool m_greenTurn;
+	bool m_mustTake;
+	bool m_pieceTaken;
 
 	GLFWwindow* m_window;
 };

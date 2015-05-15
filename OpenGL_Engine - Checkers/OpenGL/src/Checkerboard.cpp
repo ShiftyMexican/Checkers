@@ -22,6 +22,12 @@ Checkerboard::Checkerboard(GLFWwindow* window)
 
 	m_clicked = false;
 
+	m_greenTurn = true;
+
+	m_mustTake = false;
+
+	m_pieceTaken = false;
+
 	m_window = window;
 
 	m_selectedPieceID = NULL;
@@ -43,7 +49,7 @@ void Checkerboard::Update(glm::vec3 position)
 			position.z <= (*itr)->m_position.z + 10 && position.z >= (*itr)->m_position.z - 10)
 		{
 			// Check to see if the piece you have clicked has a green checker on it
-			if ((*itr)->m_isOccupied == true && (*itr)->m_isSelected == false && (*itr)->m_isGreen == true && m_selectedPieceID == NULL)
+			if ((*itr)->m_isOccupied == true && (*itr)->m_isSelected == false && (*itr)->m_isGreen == true && m_selectedPieceID == NULL && m_greenTurn == true)
 			{
 				// Sets the possible moves
 				SetGreenPossibleMoves((*itr));
@@ -51,7 +57,7 @@ void Checkerboard::Update(glm::vec3 position)
 			}
 
 			// Check to see if the piece you have clicked has a purple checker on it
-			else if ((*itr)->m_isOccupied == true && (*itr)->m_isSelected == false && (*itr)->m_isPurple == true && m_selectedPieceID == NULL)
+			else if ((*itr)->m_isOccupied == true && (*itr)->m_isSelected == false && (*itr)->m_isPurple == true && m_selectedPieceID == NULL && m_greenTurn == false)
 			{
 				// Sets the possible moves
 				SetPurplePossibleMoves((*itr));
@@ -67,46 +73,23 @@ void Checkerboard::Update(glm::vec3 position)
 			// If youve clicked the possible move, move the piece
 			else if ((*itr)->m_isPossibleMove == true)
 			{
-				(*itr)->m_isOccupied = true;
-				(*itr)->m_isGreen = m_boardpieces[m_selectedPieceID]->m_isGreen;
-				(*itr)->m_isPurple = m_boardpieces[m_selectedPieceID]->m_isPurple;
-				m_boardpieces[m_selectedPieceID]->m_isSelected = false;
-				m_boardpieces[m_selectedPieceID]->m_isOccupied = false;
+				SetMove((*itr));
 
-				if (m_canKillGreen7 == true)
+				if (m_pieceTaken == true)
 				{
-					m_boardpieces[m_selectedPieceID - 7]->m_isOccupied = false;
-					m_boardpieces[m_selectedPieceID - 7]->m_isGreen = false;
-					m_canKillGreen7 = false;
+					if ((*itr)->m_isPurple == true)
+						CheckForGreenKill((*itr));
+
+					else if ((*itr)->m_isGreen == true)
+						CheckForPurpleKill((*itr));
+
+					m_pieceTaken = false;
 				}
 
-				else if (m_canKillPurple7 == true)
+				if (m_mustTake == false)
 				{
-					m_boardpieces[m_selectedPieceID + 7]->m_isOccupied = false;
-					m_boardpieces[m_selectedPieceID + 7]->m_isPurple = false;
-					m_canKillPurple7 = false;
-				}
-
-				else if (m_canKillGreen9 == true)
-				{
-					m_boardpieces[m_selectedPieceID - 9]->m_isOccupied = false;
-					m_boardpieces[m_selectedPieceID - 9]->m_isGreen = false;
-					m_canKillGreen9 = false;
-				}
-
-				else if (m_canKillPurple9 == true)
-				{
-					m_boardpieces[m_selectedPieceID + 9]->m_isOccupied = false;
-					m_boardpieces[m_selectedPieceID + 9]->m_isPurple = false;
-					m_canKillPurple9 = false;
-				}
-
-				m_selectedPieceID = NULL;
-				
-				for (auto iter = m_boardpieces.begin(); iter != m_boardpieces.end(); iter++)
-				{
-					if ((*iter)->m_isPossibleMove == true)
-						(*iter)->m_isPossibleMove = false;
+					m_selectedPieceID = NULL;
+					m_greenTurn = !m_greenTurn;
 				}
 			}
 			else
@@ -123,6 +106,8 @@ void Checkerboard::Update(glm::vec3 position)
 
 void Checkerboard::Draw()
 {
+	Gizmos::addAABBFilled(glm::vec3(80, 0, 80), glm::vec3(90, 2.7, 90), glm::vec4(0.4, 0.2, 0, 1), nullptr);
+
 	for (auto itr = m_boardpieces.begin(); itr != m_boardpieces.end(); itr++)
 	{
 		if ((*itr)->m_isSelected == false && (*itr)->m_isPossibleMove == false)
@@ -212,45 +197,25 @@ void Checkerboard::SetGreenPossibleMoves(BoardPiece* itr)
 {
 	itr->m_isSelected = true;
 
-	if ((itr->m_id + 7) <= m_boardpieces.size())
+	if ((itr->m_id + 7) < m_boardpieces.size())
 	{
+
+		CheckForPurpleKill(itr);
+		
 		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
-		if (m_boardpieces[(itr->m_id + 7)]->m_isBlack == false && m_boardpieces[(itr->m_id + 7)]->m_isOccupied == false)
+		if (m_boardpieces[(itr->m_id + 7)]->m_isBlack == false && m_boardpieces[(itr->m_id + 7)]->m_isOccupied == false && m_mustTake == false)
 			m_boardpieces[(itr->m_id + 7)]->m_isPossibleMove = true;
 
-		if ((itr->m_id + 14) <= m_boardpieces.size())
-		{
-			if (m_boardpieces[(itr->m_id + 7)]->m_isOccupied == true && m_boardpieces[(itr->m_id + 7)]->m_isPurple == true)
-			{
-				if (m_boardpieces[(itr->m_id + 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 14)]->m_isBlack == false)
-				{
-					m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = true;
-					m_canKillPurple7 = true;
-				}
-				
-			}
-		}
 	}
 
-
-	if ((itr->m_id + 9) <= m_boardpieces.size())
+	if ((itr->m_id + 9) < m_boardpieces.size())
 	{
-		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
-		if (m_boardpieces[(itr->m_id + 9)]->m_isBlack == false && m_boardpieces[(itr->m_id + 9)]->m_isOccupied == false)
-			m_boardpieces[(itr->m_id + 9)]->m_isPossibleMove = true;
 
-		if ((itr->m_id + 18) <= m_boardpieces.size())
-		{
-			if (m_boardpieces[(itr->m_id + 9)]->m_isOccupied == true && m_boardpieces[(itr->m_id + 9)]->m_isPurple == true)
-			{
-				if (m_boardpieces[(itr->m_id + 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 18)]->m_isBlack == false)
-				{
-					m_boardpieces[(itr->m_id + 18)]->m_isPossibleMove = true;
-					m_canKillPurple9 = true;
-				}
-					
-			}
-		}
+		CheckForPurpleKill(itr);
+
+		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
+		if (m_boardpieces[(itr->m_id + 9)]->m_isBlack == false && m_boardpieces[(itr->m_id + 9)]->m_isOccupied == false && m_mustTake == false)
+			m_boardpieces[(itr->m_id + 9)]->m_isPossibleMove = true;
 
 	}
 
@@ -259,81 +224,185 @@ void Checkerboard::SetGreenPossibleMoves(BoardPiece* itr)
 void Checkerboard::SetPurplePossibleMoves(BoardPiece* itr)
 {
 	itr->m_isSelected = true;
+
 	if ((itr->m_id - 7) >= 0)
 	{
-		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
-		if (m_boardpieces[(itr->m_id - 7)]->m_isBlack == false && m_boardpieces[(itr->m_id - 7)]->m_isOccupied == false)
-			m_boardpieces[(itr->m_id - 7)]->m_isPossibleMove = true;
+		CheckForGreenKill(itr);
 
-		if ((itr->m_id - 14) <= m_boardpieces.size())
-		{
-			if (m_boardpieces[(itr->m_id - 7)]->m_isOccupied == true && m_boardpieces[(itr->m_id - 7)]->m_isGreen == true)
-			{
-				if (m_boardpieces[(itr->m_id - 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 14)]->m_isBlack == false)
-				{
-					m_boardpieces[(itr->m_id - 14)]->m_isPossibleMove = true;
-					m_canKillGreen7 = true;
-				}	
-			}
-		}
+		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
+		if (m_boardpieces[(itr->m_id - 7)]->m_isBlack == false && m_boardpieces[(itr->m_id - 7)]->m_isOccupied == false && m_mustTake == false)
+			m_boardpieces[(itr->m_id - 7)]->m_isPossibleMove = true;
 	}
 
 	if ((itr->m_id - 9) >= 0)
 	{
-		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
-		if (m_boardpieces[(itr->m_id - 9)]->m_isBlack == false && m_boardpieces[(itr->m_id - 9)]->m_isOccupied == false)
-			m_boardpieces[(itr->m_id - 9)]->m_isPossibleMove = true;
+		CheckForGreenKill(itr);
 
-		if ((itr->m_id - 18) <= m_boardpieces.size())
-		{
-			if (m_boardpieces[(itr->m_id - 9)]->m_isOccupied == true && m_boardpieces[(itr->m_id - 9)]->m_isGreen == true)
-			{
-				if (m_boardpieces[(itr->m_id - 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 18)]->m_isBlack == false)
-				{
-					m_boardpieces[(itr->m_id - 18)]->m_isPossibleMove = true;
-					m_canKillGreen9 = true;
-				}
-			}
-		}
+		// Sets the Possible moves of the piece selected ------------------------------------------------------------------------
+		if (m_boardpieces[(itr->m_id - 9)]->m_isBlack == false && m_boardpieces[(itr->m_id - 9)]->m_isOccupied == false && m_mustTake == false)
+			m_boardpieces[(itr->m_id - 9)]->m_isPossibleMove = true;
 	}
 }
 
 void Checkerboard::ResetPossible(BoardPiece* itr)
 {
 	itr->m_isSelected = false;
+	m_mustTake = false;
 
 	if (itr->m_isGreen == true)
 	{
-		if ((itr->m_id + 7) <= m_boardpieces.size())
+		if ((itr->m_id + 7) < m_boardpieces.size())
 			m_boardpieces[(itr->m_id + 7)]->m_isPossibleMove = false;
 
-		if ((itr->m_id + 9) <= m_boardpieces.size())
+		if ((itr->m_id + 9) < m_boardpieces.size())
 			m_boardpieces[(itr->m_id + 9)]->m_isPossibleMove = false;
 
-		if ((itr->m_id + 14) <= m_boardpieces.size())
+		if ((itr->m_id + 14) < m_boardpieces.size())
 			m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = false;
 
-		if ((itr->m_id + 18) <= m_boardpieces.size())
+		if ((itr->m_id + 18) < m_boardpieces.size())
 			m_boardpieces[(itr->m_id + 18)]->m_isPossibleMove = false;
 	}
 
 	else if (itr->m_isPurple == true)
 	{
-		if ((itr->m_id - 7) <= m_boardpieces.size())
+		if ((itr->m_id - 7) >= 0)
 			m_boardpieces[(itr->m_id - 7)]->m_isPossibleMove = false;
 
-		if ((itr->m_id - 9) <= m_boardpieces.size())
+		if ((itr->m_id - 9) >= 0)
 			m_boardpieces[(itr->m_id - 9)]->m_isPossibleMove = false;
 
-		if ((itr->m_id - 14) <= m_boardpieces.size())
+		if ((itr->m_id - 14) >= 0)
 			m_boardpieces[(itr->m_id - 14)]->m_isPossibleMove = false;
 
-		if ((itr->m_id - 18) <= m_boardpieces.size())
+		if ((itr->m_id - 18) >= 0)
 			m_boardpieces[(itr->m_id - 18)]->m_isPossibleMove = false;
 	}
 
 
 
 	m_selectedPieceID = NULL;
+}
+
+void Checkerboard::SetMove(BoardPiece* itr)
+{
+	itr->m_isOccupied = true;
+	itr->m_isGreen = m_boardpieces[m_selectedPieceID]->m_isGreen;
+	itr->m_isPurple = m_boardpieces[m_selectedPieceID]->m_isPurple;
+	m_boardpieces[m_selectedPieceID]->m_isSelected = false;
+	m_boardpieces[m_selectedPieceID]->m_isOccupied = false;
+	m_mustTake = false;
+
+	if (m_canKillGreen7 == true)
+	{
+		m_boardpieces[m_selectedPieceID - 7]->m_isOccupied = false;
+		m_boardpieces[m_selectedPieceID - 7]->m_isGreen = false;
+		m_canKillGreen7 = false;
+		m_pieceTaken = true;
+	}
+
+	else if (m_canKillPurple7 == true)
+	{
+		m_boardpieces[m_selectedPieceID + 7]->m_isOccupied = false;
+		m_boardpieces[m_selectedPieceID + 7]->m_isPurple = false;
+		m_canKillPurple7 = false;
+		m_pieceTaken = true;
+	}
+
+	else if (m_canKillGreen9 == true)
+	{
+		m_boardpieces[m_selectedPieceID - 9]->m_isOccupied = false;
+		m_boardpieces[m_selectedPieceID - 9]->m_isGreen = false;
+		m_canKillGreen9 = false;
+		m_pieceTaken = true;
+	}
+
+	else if (m_canKillPurple9 == true)
+	{
+		m_boardpieces[m_selectedPieceID + 9]->m_isOccupied = false;
+		m_boardpieces[m_selectedPieceID + 9]->m_isPurple = false;
+		m_canKillPurple9 = false;
+		m_pieceTaken = true;
+	}
+
+	for (auto iter = m_boardpieces.begin(); iter != m_boardpieces.end(); iter++)
+	{
+		if ((*iter)->m_isPossibleMove == true)
+			(*iter)->m_isPossibleMove = false;
+	}	
+
+	m_selectedPieceID = itr->m_id;
+}
+
+void Checkerboard::CheckForPurpleKill(BoardPiece* itr)
+{
+	if ((itr->m_id + 7) < m_boardpieces.size())
+	{
+		if (m_boardpieces[(itr->m_id + 7)]->m_isOccupied == true && m_boardpieces[(itr->m_id + 7)]->m_isPurple == true)
+		{
+			if ((itr->m_id + 14) < m_boardpieces.size())
+			{
+				if (m_boardpieces[(itr->m_id + 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 14)]->m_isBlack == false)
+				{
+					m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = true;
+					m_canKillPurple7 = true;
+					m_mustTake = true;
+				}
+			}
+		}
+	}
+
+	if ((itr->m_id + 9) < m_boardpieces.size())
+	{
+		if (m_boardpieces[(itr->m_id + 9)]->m_isOccupied == true && m_boardpieces[(itr->m_id + 9)]->m_isPurple == true)
+		{
+			if ((itr->m_id + 18) < m_boardpieces.size())
+			{
+				if (m_boardpieces[(itr->m_id + 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 18)]->m_isBlack == false)
+				{
+					m_boardpieces[(itr->m_id + 18)]->m_isPossibleMove = true;
+					m_canKillPurple9 = true;
+					m_mustTake = true;
+				}
+			}
+		}
+	}
+
+
+}
+
+void Checkerboard::CheckForGreenKill(BoardPiece* itr)
+{
+	if ((itr->m_id - 7) >= 0)
+	{
+		if (m_boardpieces[(itr->m_id - 7)]->m_isOccupied == true && m_boardpieces[(itr->m_id - 7)]->m_isGreen == true)
+		{
+			if ((itr->m_id - 14) < m_boardpieces.size())
+			{
+				if (m_boardpieces[(itr->m_id - 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 14)]->m_isBlack == false)
+				{
+					m_boardpieces[(itr->m_id - 14)]->m_isPossibleMove = true;
+					m_canKillGreen7 = true;
+					m_mustTake = true;
+				}
+			}
+		}
+	}
+
+	if ((itr->m_id - 9) >= 0)
+	{
+		if (m_boardpieces[(itr->m_id - 9)]->m_isOccupied == true && m_boardpieces[(itr->m_id - 9)]->m_isGreen == true)
+		{
+			if ((itr->m_id - 18) < m_boardpieces.size())
+			{
+				if (m_boardpieces[(itr->m_id - 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 18)]->m_isBlack == false)
+				{
+					m_boardpieces[(itr->m_id - 18)]->m_isPossibleMove = true;
+					m_canKillGreen9 = true;
+					m_mustTake = true;
+				}
+			}
+		}
+	}
 }
 
