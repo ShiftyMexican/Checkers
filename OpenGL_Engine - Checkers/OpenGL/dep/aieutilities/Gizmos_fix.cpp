@@ -323,7 +323,7 @@ void Gizmos::addAABBFilled(const glm::vec3& a_center,
 void Gizmos::addCylinderFilled(const glm::vec3& a_center, float a_radius, float a_fHalfLength,
 	unsigned int a_segments, const glm::vec4& a_fillColour, const glm::mat4* a_transform /* = nullptr */)
 {
-	glm::vec4 white(1,1,1,1);
+	glm::vec4 white(0,0,0,1);
 
 	float segmentSize = (2 * glm::pi<float>()) / a_segments;
 
@@ -361,7 +361,7 @@ void Gizmos::addCylinderFilled(const glm::vec3& a_center, float a_radius, float 
 
 		// lines
 		addLine(a_center + v1top, a_center + v2top, white, white);
-		addLine(a_center + v1top, a_center + v1bottom, white, white);
+		//addLine(a_center + v1top, a_center + v1bottom, white, white);
 		addLine(a_center + v1bottom, a_center + v2bottom, white, white);
 	}
 }
