@@ -65,7 +65,7 @@ private:
 	float m_xOffset;
 	float m_yOffset;
 
-	float m_pieceID;
+	int m_pieceID;
 	float m_iterations;
 
 	int m_selectedPieceID;
