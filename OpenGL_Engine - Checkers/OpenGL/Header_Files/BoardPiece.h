@@ -45,6 +45,8 @@ public:
 	bool m_isGreen;
 	bool m_isSelected;
 	bool m_isPossibleMove;
+	bool m_isGreenKing;
+	bool m_isPurpleKing;
 
 private:
 

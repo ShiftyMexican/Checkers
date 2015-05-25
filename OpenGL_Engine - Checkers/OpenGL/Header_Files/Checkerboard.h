@@ -37,14 +37,18 @@ public:
 	void AddBoardPiece(int id, float xPos, float zPos, bool colour, bool occupied);
 
 	void SetGreenPossibleMoves(BoardPiece* itr);
+	void SetGreenKingPossibleMoves(BoardPiece* itr);
 
 	void SetPurplePossibleMoves(BoardPiece* itr);
+	void SetPurpleKingPossibleMoves(BoardPiece* itr);
 
 	void ResetPossible(BoardPiece* itr);
 
 	void SetMove(BoardPiece* itr);
 	void CheckForPurpleKill(BoardPiece* itr);
 	void CheckForGreenKill(BoardPiece* itr);
+	void GreenKingCheck(BoardPiece* itr);
+	void PurpleKingCheck(BoardPiece* itr);
 
 
 private:
@@ -61,7 +65,7 @@ private:
 	float m_xOffset;
 	float m_yOffset;
 
-	float m_pieceID;
+	int m_pieceID;
 	float m_iterations;
 
 	int m_selectedPieceID;
@@ -69,10 +73,10 @@ private:
 	bool m_isBlack;
 	bool m_occupied;
 	bool m_clicked;
-	bool m_canKillGreen7;
-	bool m_canKillPurple7;
-	bool m_canKillGreen9;
-	bool m_canKillPurple9;
+	bool m_killMinus7;
+	bool m_killPlus7;
+	bool m_killMinus9;
+	bool m_killPlus9;
 	bool m_greenTurn;
 	bool m_mustTake;
 	bool m_pieceTaken;
