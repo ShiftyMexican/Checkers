@@ -1,5 +1,8 @@
-﻿Build started 26/05/2015 4:39:20 PM.
+﻿Build started 28/05/2015 4:04:59 PM.
+     1>Project "C:\Users\jarrod.dowsey\Documents\Checkers\OpenGL_Engine - Checkers\OpenGL\OpenGL.vcxproj" on node 2 (Clean target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\debug\opengl.pdb' because it is being used by another process.
+     1>Done Building Project "C:\Users\jarrod.dowsey\Documents\Checkers\OpenGL_Engine - Checkers\OpenGL\OpenGL.vcxproj" (Clean target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.29
+Time Elapsed 00:00:00.01

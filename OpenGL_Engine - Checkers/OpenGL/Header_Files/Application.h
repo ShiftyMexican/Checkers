@@ -17,6 +17,7 @@
 #include <glm/ext.hpp>
 
 #include "Object.h"
+#include "NetworkManager.h"
 
 
 struct GridVertex {
@@ -77,6 +78,9 @@ protected:
 
 	// Checkers
 	Checkers* m_checkers;
+
+	// Network Manager
+	NetworkManager* m_network;
 
 	float m_currentTime;
 	float m_previousTime;

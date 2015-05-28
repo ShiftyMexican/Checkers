@@ -22,7 +22,7 @@ Application::Application()
 	myCamera->LookAt(vec3(40, 0, 40), vec3(0), vec3(0, 1, 0));
 	myCamera->SetFlySpeed(1000.0f);
 	//---------------------------------------------------------------------------
-
+	
 	m_checkers = new Checkers(window);
 }
 
@@ -64,6 +64,11 @@ void Application::StartUp()
 	window = glfwCreateWindow(1240, 768, "Computer Graphics", nullptr, nullptr);
 	//-----------------------------------------------------------------------------
 
+	// Setting up the network------------------------------------------------------
+	m_network = new NetworkManager();
+	m_network->Run();
+	//-----------------------------------------------------------------------------
+
 	// Deleteing the window if null------------------------------------------------
 	if (window == nullptr)
 	{
@@ -99,6 +104,7 @@ void Application::Update()
 	//-------------------------------------------------------------------------
 
 	m_checkers->Update(deltaTime);
+	m_network->Update();
 }
 
 // Draw Function

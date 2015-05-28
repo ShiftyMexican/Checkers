@@ -57,6 +57,12 @@
     <ClCompile Include="src\BoardPiece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\NetworkManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ClientApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dep\glfw\include\GLFW\glfw3.h">
@@ -99,6 +105,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header_Files\BoardPiece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header_Files\NetworkManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header_Files\ClientApplication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

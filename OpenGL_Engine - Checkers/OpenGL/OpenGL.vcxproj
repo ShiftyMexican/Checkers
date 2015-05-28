@@ -52,13 +52,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;GLM_SWIZZLE;GLM_FORCE_PURE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./dep/glfw/include;./dep/glm;./dep/aieutilities;./src;./Header_Files;./dep/stb-master;./dep/AntTweakBar/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./dep/glfw/include;./dep/glm;./dep/aieutilities;./src;./Header_Files;./dep/stb-master;./dep/AntTweakBar/include;./dep/RackNet/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>./dep/glfw/lib-vc2013;./dep/AntTweakBar/lib;./dep/FBXLoader;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;AntTweakBar.lib;FBXLoader_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./dep/glfw/lib-vc2013;./dep/AntTweakBar/lib;./dep/FBXLoader;./dep/RackNet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;AntTweakBar.lib;FBXLoader_d.lib;ws2_32.lib;Raknet_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,15 +71,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CONSOLE;GLM_SWIZZLE;GLM_FORCE_PURE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./dep/glfw/include;./dep/glm;./dep/aieutilities;./src;./Header_Files;./dep/stb-master;./dep/AntTweakBar/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./dep/glfw/include;./dep/glm;./dep/aieutilities;./src;./Header_Files;./dep/stb-master;./dep/AntTweakBar/include;./dep/RackNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;AntTweakBar.lib;FBXLoader.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>./dep/glfw/lib-vc2013;./dep/AntTweakBar/lib;./dep/FBXLoader;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;AntTweakBar.lib;FBXLoader.lib;Raknet.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./dep/glfw/lib-vc2013;./dep/AntTweakBar/lib;./dep/FBXLoader;./dep/RackNet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -86,6 +87,8 @@
     <ClCompile Include="src\BoardPiece.cpp" />
     <ClCompile Include="src\Checkerboard.cpp" />
     <ClCompile Include="src\Checkers.cpp" />
+    <ClCompile Include="src\ClientApplication.cpp" />
+    <ClCompile Include="src\NetworkManager.cpp" />
     <ClCompile Include="src\RenderTarget.cpp" />
     <ClCompile Include="src\FBXObject.cpp" />
     <ClCompile Include="src\MyAntTweakBar.cpp" />
@@ -103,11 +106,13 @@
     <ClInclude Include="Header_Files\BoardPiece.h" />
     <ClInclude Include="Header_Files\Checkerboard.h" />
     <ClInclude Include="Header_Files\Checkers.h" />
+    <ClInclude Include="Header_Files\ClientApplication.h" />
     <ClInclude Include="Header_Files\FBXObject.h" />
     <ClInclude Include="Header_Files\MyAntTweakBar.h" />
     <ClInclude Include="Header_Files\Application.h" />
     <ClInclude Include="Header_Files\Camera.h" />
     <ClInclude Include="Header_Files\FreeCamera.h" />
+    <ClInclude Include="Header_Files\NetworkManager.h" />
     <ClInclude Include="Header_Files\Object.h" />
     <ClInclude Include="Header_Files\SkyBox.h" />
     <ClInclude Include="Header_Files\RenderTarget.h" />
