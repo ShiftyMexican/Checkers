@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "FreeCamera.h"
 #include "Checkers.h"
+#include "NetworkManager.h"
+#include "ClientApplication.h"
 
 using glm::vec3;
 using glm::vec4;
@@ -12,6 +14,8 @@ Application::Application()
 	// Calling of the Start up Function
 	StartUp();
 	//---------------------------------
+	m_isActiveClient = false;
+	m_isServer = false;
 
 	// Initializing Gizmos
 	Gizmos::create();
@@ -65,8 +69,9 @@ void Application::StartUp()
 	//-----------------------------------------------------------------------------
 
 	// Setting up the network------------------------------------------------------
-	m_network = new NetworkManager();
-	m_network->Run();
+	m_network = nullptr;
+	m_client = nullptr;
+	//m_network->Run();
 	//-----------------------------------------------------------------------------
 
 	// Deleteing the window if null------------------------------------------------
@@ -103,8 +108,53 @@ void Application::Update()
 	m_previousTime = m_currentTime;
 	//-------------------------------------------------------------------------
 
+	if (m_isServer == false && m_isActiveClient == false)
+	{
+		char str[512];
+
+		printf("(C)lient or (S)erver?\n");
+		gets(str);
+
+		if ((str[0] == 'c') || (str[0] == 'C'))
+		{
+			m_isServer = false;
+			m_isActiveClient = true;
+			m_client = new ClientApplication();
+		}
+		else if ((str[0] == 's') || (str[0] == 'S'))
+		{
+			m_isServer = true;
+			m_network = new NetworkManager();
+		}
+
+		if (m_isServer == true)
+		{
+			m_network->Run();
+		}
+		else
+		{
+			printf("enter sever IP or hit enter for 127.0.0.1\n");
+			gets(str);
+
+			if (str[0] == 0)
+			{
+				strcpy(str, "127.0.0.1");
+			}
+			printf("starting the Client. \n");
+			m_client->HandleNetworkConnection();
+		}
+
+	}
+
 	m_checkers->Update(deltaTime);
-	m_network->Update();
+
+	if (m_isServer == true)
+	{
+		m_network->Update();
+	}
+
+	if (m_isActiveClient == true)
+		m_client->Update();
 }
 
 // Draw Function

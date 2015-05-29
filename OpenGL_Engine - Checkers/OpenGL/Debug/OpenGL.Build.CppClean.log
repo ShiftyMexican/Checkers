@@ -4,6 +4,7 @@ c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\boardpiece.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\checkerboard.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\checkers.obj
+c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\clientapplication.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\networkmanager.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\rendertarget.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\fbxobject.obj
@@ -15,7 +16,6 @@ c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\object.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\skybox.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\gl_core_4_4.obj
-c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\opengl\debug\clientapplication.obj
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\debug\opengl.ilk
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\debug\opengl.exe
 c:\users\jarrod.dowsey\documents\checkers\opengl_engine - checkers\debug\opengl.pdb

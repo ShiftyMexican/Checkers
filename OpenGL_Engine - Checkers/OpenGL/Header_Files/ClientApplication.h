@@ -16,13 +16,14 @@ public:
 	ClientApplication();
 	~ClientApplication();
 
+	void Update();
+
 	// Initialize the connection
 	void HandleNetworkConnection();
 	void InitializeClientConnection();
 
 	// Handle the incoming packets
-	void HandleNetworkMessgaes();
-
+	void HandleNetworkMessgaes(RakNet::RakPeerInterface* pPeerInterface);
 private:
 
 	RakNet::RakPeerInterface* m_peerInterface;

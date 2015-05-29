@@ -1,4 +1,5 @@
 #include "ClientApplication.h"
+#include "NetworkManager.h"
 #include <iostream>
 #include <string>
 
@@ -8,6 +9,11 @@ ClientApplication::ClientApplication()
 
 ClientApplication::~ClientApplication()
 {
+}
+
+void ClientApplication::Update()
+{
+	HandleNetworkMessgaes(m_peerInterface);
 }
 
 // Initialize the connection
@@ -24,7 +30,7 @@ void ClientApplication::InitializeClientConnection()
 
 	m_peerInterface->Startup(1, &sd, 1);
 
-	std::cout << "Connecting to serverat: " << IP << std::endl;
+	std::cout << "Connecting to server at: " << IP << std::endl;
 
 	RakNet::ConnectionAttemptResult res = m_peerInterface->Connect(IP, PORT, nullptr, 0);
 
@@ -36,12 +42,12 @@ void ClientApplication::InitializeClientConnection()
 }
 
 // Handle the incoming packets
-void ClientApplication::HandleNetworkMessgaes()
+void ClientApplication::HandleNetworkMessgaes(RakNet::RakPeerInterface* pPeerInterface)
 {
-	RakNet::Packet* packet;
+	RakNet::Packet* packet = nullptr;
 
-	for (packet = m_peerInterface->Receive(); packet;
-		m_peerInterface->DeallocatePacket(packet), packet = m_peerInterface->Receive())
+	for (packet = pPeerInterface->Receive(); packet;
+		pPeerInterface->DeallocatePacket(packet), packet = pPeerInterface->Receive())
 	{
 		switch (packet->data[0])
 		{
@@ -72,6 +78,16 @@ void ClientApplication::HandleNetworkMessgaes()
 		case ID_CONNECTION_LOST:
 			std::cout << "A client has lost the connection. \n" << std::endl;
 			break;
+
+		case NetworkManager::ID_SERVER_CLIENT_ID:
+			{
+				RakNet::BitStream bsIn(packet->data, packet->length, false);
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				int m_uiClientID = bsIn.Read(m_uiClientID);
+
+				std::cout << "The Server has given us the id of:"<< m_uiClientID << std::endl;
+			} break;
+
 		default:
 			std::cout << "Received a message with an unknown ID. \n" << packet->data[0] << std::endl;
 			break;

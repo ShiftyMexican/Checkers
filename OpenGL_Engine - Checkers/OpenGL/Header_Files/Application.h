@@ -18,6 +18,7 @@
 
 #include "Object.h"
 #include "NetworkManager.h"
+#include "ClientApplication.h"
 
 
 struct GridVertex {
@@ -69,6 +70,9 @@ public:
 
 	unsigned int ShaderHotLoad();
 
+	bool m_isServer;
+	bool m_isActiveClient;
+
 protected:
 	// Window
 	GLFWwindow* window;
@@ -82,8 +86,12 @@ protected:
 	// Network Manager
 	NetworkManager* m_network;
 
+	// Client Application
+	ClientApplication* m_client;
+
 	float m_currentTime;
 	float m_previousTime;
+
 
 };
 
