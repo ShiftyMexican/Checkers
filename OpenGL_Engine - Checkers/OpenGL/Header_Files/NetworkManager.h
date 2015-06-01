@@ -27,7 +27,9 @@ public:
 
 	enum NetworkIDs
 	{
-		ID_SERVER_CLIENT_ID = ID_USER_PACKET_ENUM + 1
+		ID_SERVER_CLIENT_ID = ID_USER_PACKET_ENUM + 1,
+		ID_CLIENT_CREATE_OBJECT = ID_USER_PACKET_ENUM + 2,
+		ID_SERVER_FULL_OBJECT_DATA = ID_USER_PACKET_ENUM + 3,
 	};
 
 	unsigned int SystemAddressToClientID(RakNet::SystemAddress& systemAddress);
@@ -37,6 +39,10 @@ public:
 	void RemoveConnection(RakNet::SystemAddress systemAddress);
 
 	void SendClientIDToClient(unsigned int uiClientID);
+
+	void CreateObject(RakNet::BitStream& bsIn, RakNet::SystemAddress& ownerSystemAdress);
+
+	void SendObjectToAllClients(BoardPiece& boardPiece, RakNet::SystemAddress systemAddress);
 
 private:
 	struct ConnectionInfo

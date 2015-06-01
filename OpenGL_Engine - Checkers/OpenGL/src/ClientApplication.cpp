@@ -83,14 +83,35 @@ void ClientApplication::HandleNetworkMessgaes(RakNet::RakPeerInterface* pPeerInt
 			{
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				int m_uiClientID = bsIn.Read(m_uiClientID);
+				bsIn.Read(m_uiClientID);
 
 				std::cout << "The Server has given us the id of:"<< m_uiClientID << std::endl;
 			} break;
+
+		case NetworkManager::ID_SERVER_FULL_OBJECT_DATA:
+		{
+			RakNet::BitStream bsIn(packet->data, packet->length, false);
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			ReadObjectDataFromServer(bsIn);
+		} break;
 
 		default:
 			std::cout << "Received a message with an unknown ID. \n" << packet->data[0] << std::endl;
 			break;
 		}
 	}
+}
+
+void ClientApplication::ReadObjectDataFromServer(RakNet::BitStream& bsIn)
+{
+	BoardPiece* newBoardPiece;
+
+	bsIn.Read(newBoardPiece->m_id);
+	bsIn.Read(newBoardPiece->m_isGreen);
+	bsIn.Read(newBoardPiece->m_isGreenKing);
+	bsIn.Read(newBoardPiece->m_isPurple);
+	bsIn.Read(newBoardPiece->m_isPurpleKing);
+	bsIn.Read(newBoardPiece->m_isOccupied);
+	bsIn.Read(newBoardPiece->uiObjectID);
+	bsIn.Read(newBoardPiece->uiOwnerClientID);
 }

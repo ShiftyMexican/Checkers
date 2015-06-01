@@ -24,9 +24,13 @@ public:
 
 	// Handle the incoming packets
 	void HandleNetworkMessgaes(RakNet::RakPeerInterface* pPeerInterface);
+
+	void ReadObjectDataFromServer(RakNet::BitStream& bsIn);
 private:
 
 	RakNet::RakPeerInterface* m_peerInterface;
+
+	unsigned int m_uiClientID;
 
 	const char* IP = "127.0.0.1";
 	const unsigned short PORT = 5456;

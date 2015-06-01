@@ -5,11 +5,12 @@
 #include "RakPeerInterface.h"
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
+#include "BoardPiece.h"
 
 NetworkManager::NetworkManager()
 {
 	m_client1 = new ClientApplication();
-	
+	m_uiConnectionCounter = 1;
 }
 
 NetworkManager::~NetworkManager()
@@ -51,6 +52,7 @@ void NetworkManager::HandleNetworkMessages(RakNet::RakPeerInterface* pPeerInterf
 		{
 		case ID_NEW_INCOMING_CONNECTION:
 		{
+			//SystemAddressToClientID(packet->systemAddress);
 			AddNewConnection(packet->systemAddress);
 			std::cout << "A connection is incoming.\n" << std::endl;
 		} break;
@@ -65,6 +67,13 @@ void NetworkManager::HandleNetworkMessages(RakNet::RakPeerInterface* pPeerInterf
 		{
 			RemoveConnection(packet->systemAddress);
 			std::cout << "A client has lost the connection. \n" << std::endl;
+		} break;
+
+		case ID_CLIENT_CREATE_OBJECT:
+		{
+			RakNet::BitStream bsIn(packet->data, packet->length, false);
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			CreateObject(bsIn, packet->systemAddress);
 		} break;
 			
 		default:
@@ -117,4 +126,34 @@ unsigned int NetworkManager::SystemAddressToClientID(RakNet::SystemAddress& syst
 	}
 
 	return 0;
+}
+
+void NetworkManager::CreateObject(RakNet::BitStream& bsIn, RakNet::SystemAddress& ownerSystemAdress)
+{
+	BoardPiece* newBoardPiece;
+
+	bsIn.Read(newBoardPiece->m_id);
+	bsIn.Read(newBoardPiece->m_isGreen);
+	bsIn.Read(newBoardPiece->m_isGreenKing);
+	bsIn.Read(newBoardPiece->m_isPurple);
+	bsIn.Read(newBoardPiece->m_isPurpleKing);
+	bsIn.Read(newBoardPiece->m_isOccupied);
+	
+	newBoardPiece->uiOwnerClientID = SystemAddressToClientID(ownerSystemAdress);
+	newBoardPiece->uiObjectID = m_uiObjectCounter++;
+	
+}
+
+void NetworkManager::SendObjectToAllClients(BoardPiece& boardPiece, RakNet::SystemAddress systemAddress)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write((RakNet::MessageID)ID_SERVER_FULL_OBJECT_DATA);
+	bsOut.Write(boardPiece.m_id);
+	bsOut.Write(boardPiece.m_isGreen);
+	bsOut.Write(boardPiece.m_isGreenKing);
+	bsOut.Write(boardPiece.m_isPurple);
+	bsOut.Write(boardPiece.m_isPurpleKing);
+	bsOut.Write(boardPiece.m_isOccupied);
+
+	m_peerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemAddress, true);
 }

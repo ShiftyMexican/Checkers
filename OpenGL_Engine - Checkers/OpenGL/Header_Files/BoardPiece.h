@@ -48,6 +48,9 @@ public:
 	bool m_isGreenKing;
 	bool m_isPurpleKing;
 
+	unsigned int uiOwnerClientID;
+	unsigned int uiObjectID;
+
 private:
 
 
