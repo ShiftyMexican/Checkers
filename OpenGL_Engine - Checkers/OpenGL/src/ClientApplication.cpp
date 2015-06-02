@@ -86,6 +86,9 @@ void ClientApplication::HandleNetworkMessgaes(RakNet::RakPeerInterface* pPeerInt
 				bsIn.Read(m_uiClientID);
 
 				std::cout << "The Server has given us the id of:"<< m_uiClientID << std::endl;
+
+				CreateGameObject();
+
 			} break;
 
 		case NetworkManager::ID_SERVER_FULL_OBJECT_DATA:
@@ -104,7 +107,7 @@ void ClientApplication::HandleNetworkMessgaes(RakNet::RakPeerInterface* pPeerInt
 
 void ClientApplication::ReadObjectDataFromServer(RakNet::BitStream& bsIn)
 {
-	BoardPiece* newBoardPiece;
+	BoardPiece* newBoardPiece; //  = new BoardPiece(0, 1, 1, false, false);
 
 	bsIn.Read(newBoardPiece->m_id);
 	bsIn.Read(newBoardPiece->m_isGreen);
@@ -114,4 +117,61 @@ void ClientApplication::ReadObjectDataFromServer(RakNet::BitStream& bsIn)
 	bsIn.Read(newBoardPiece->m_isOccupied);
 	bsIn.Read(newBoardPiece->uiObjectID);
 	bsIn.Read(newBoardPiece->uiOwnerClientID);
+
+	bool bFound = false;
+
+	for (int i = 0; i < m_board->m_boardpieces.size(); i++)
+	{
+		if (m_board->m_boardpieces[i]->uiObjectID == newBoardPiece->uiObjectID)
+		{
+			bFound = true;
+
+			BoardPiece* obj = m_board->m_boardpieces[i];
+			obj->m_id = newBoardPiece->m_id;
+			obj->m_isGreen = newBoardPiece->m_isGreen;
+			obj->m_isGreenKing = newBoardPiece->m_isGreenKing;
+			obj->m_isPurple = newBoardPiece->m_isPurple;
+			obj->m_isPurpleKing = newBoardPiece->m_isPurpleKing;
+			obj->m_isOccupied = newBoardPiece->m_isOccupied;
+			obj->uiOwnerClientID = newBoardPiece->uiOwnerClientID;
+
+		}
+	}
+
+	//if (!bFound)
+	//{
+	//	m_board->m_boardpieces.push_back(newBoardPiece);
+	//	if (newBoardPiece->uiOwnerClientID == m_uiClientID)
+	//	{
+	//		m_uiClient
+	//	}
+	//}
+}
+
+void ClientApplication::CreateGameObject()
+{
+	RakNet::BitStream bsOut;
+
+	BoardPiece* tempBoardPiece = new BoardPiece(0, 1, 1, false, false);
+
+	tempBoardPiece->m_id = 0;
+	tempBoardPiece->m_isGreen = false;
+	tempBoardPiece->m_isGreenKing = false;
+	tempBoardPiece->m_isPurple = false;
+	tempBoardPiece->m_isPurpleKing = false;
+	tempBoardPiece->m_isOccupied = false;
+	tempBoardPiece->uiObjectID = 0;
+	tempBoardPiece->uiOwnerClientID = 0;
+
+	bsOut.Write((RakNet::MessageID)NetworkManager::ID_CLIENT_CREATE_OBJECT);
+	bsOut.Write(tempBoardPiece->m_id);
+	bsOut.Write(tempBoardPiece->m_isGreen);
+	bsOut.Write(tempBoardPiece->m_isGreenKing);
+	bsOut.Write(tempBoardPiece->m_isPurple);
+	bsOut.Write(tempBoardPiece->m_isPurpleKing);
+	bsOut.Write(tempBoardPiece->m_isOccupied);
+	bsOut.Write(tempBoardPiece->uiObjectID);
+	bsOut.Write(tempBoardPiece->uiOwnerClientID);
+
+	m_peerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

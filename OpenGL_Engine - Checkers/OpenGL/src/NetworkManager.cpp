@@ -75,6 +75,11 @@ void NetworkManager::HandleNetworkMessages(RakNet::RakPeerInterface* pPeerInterf
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			CreateObject(bsIn, packet->systemAddress);
 		} break;
+
+		case ID_SERVER_SEND_VALUES_TO_CLIENT:
+		{
+			
+		}
 			
 		default:
 			std::cout << "Received a message with an unknown ID. \n" << packet->data[0];
@@ -130,7 +135,7 @@ unsigned int NetworkManager::SystemAddressToClientID(RakNet::SystemAddress& syst
 
 void NetworkManager::CreateObject(RakNet::BitStream& bsIn, RakNet::SystemAddress& ownerSystemAdress)
 {
-	BoardPiece* newBoardPiece;
+	BoardPiece* newBoardPiece = new BoardPiece(0, 1, 1, false, false);
 
 	bsIn.Read(newBoardPiece->m_id);
 	bsIn.Read(newBoardPiece->m_isGreen);
