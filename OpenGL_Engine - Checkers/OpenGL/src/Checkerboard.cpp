@@ -301,6 +301,16 @@ void Checkerboard::SetMove(BoardPiece* itr)
 	m_mustTake = false;
 	m_greenTurn = !m_greenTurn;
 
+	if (itr->m_id == m_selectedPieceID + 14)
+		m_killPlus7 = true;
+	else if (itr->m_id == m_selectedPieceID + 18)
+		m_killPlus9 = true;
+	else if (itr->m_id == m_selectedPieceID - 14)
+		m_killMinus7 = true;
+	else if (itr->m_id == m_selectedPieceID - 18)
+		m_killMinus9 = true;
+
+
 	if (m_killMinus7 == true)
 	{
 		m_boardpieces[m_selectedPieceID - 7]->m_isOccupied = false;
@@ -380,7 +390,7 @@ void Checkerboard::CheckForPurpleKill(BoardPiece* itr)
 					if (m_boardpieces[(itr->m_id + 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 14)]->m_isBlack == false)
 					{
 						m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = true;
-						m_killPlus7 = true;
+						//m_killPlus7 = true;
 						m_mustTake = true;
 					}
 				}
@@ -396,7 +406,7 @@ void Checkerboard::CheckForPurpleKill(BoardPiece* itr)
 					if (m_boardpieces[(itr->m_id + 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 18)]->m_isBlack == false)
 					{
 						m_boardpieces[(itr->m_id + 18)]->m_isPossibleMove = true;
-						m_killPlus9 = true;
+						//m_killPlus9 = true;
 						m_mustTake = true;
 					}
 				}
@@ -415,7 +425,7 @@ void Checkerboard::CheckForPurpleKill(BoardPiece* itr)
 					if (m_boardpieces[(itr->m_id + 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 14)]->m_isBlack == false)
 					{
 						m_boardpieces[(itr->m_id + 14)]->m_isPossibleMove = true;
-						m_killPlus7 = true;
+						//m_killPlus7 = true;
 						m_mustTake = true;
 					}
 				}
@@ -431,7 +441,7 @@ void Checkerboard::CheckForPurpleKill(BoardPiece* itr)
 					if (m_boardpieces[(itr->m_id + 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id + 18)]->m_isBlack == false)
 					{
 						m_boardpieces[(itr->m_id + 18)]->m_isPossibleMove = true;
-						m_killPlus9 = true;
+						//m_killPlus9 = true;
 						m_mustTake = true;
 					}
 				}
@@ -447,7 +457,7 @@ void Checkerboard::CheckForPurpleKill(BoardPiece* itr)
 					if (m_boardpieces[(itr->m_id - 14)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 14)]->m_isBlack == false)
 					{
 						m_boardpieces[(itr->m_id - 14)]->m_isPossibleMove = true;
-						m_killMinus7 = true;
+						//m_killMinus7 = true;
 						m_mustTake = true;
 					}
 				}
@@ -463,7 +473,7 @@ void Checkerboard::CheckForPurpleKill(BoardPiece* itr)
 					if (m_boardpieces[(itr->m_id - 18)]->m_isOccupied == false && m_boardpieces[(itr->m_id - 18)]->m_isBlack == false)
 					{
 						m_boardpieces[(itr->m_id - 18)]->m_isPossibleMove = true;
-						m_killMinus9 = true;
+						//m_killMinus9 = true;
 						m_mustTake = true;
 					}
 				}
