@@ -47,6 +47,7 @@ public:
 	bool m_isPossibleMove;
 	bool m_isGreenKing;
 	bool m_isPurpleKing;
+	bool m_sendMove;
 
 	unsigned int uiOwnerClientID;
 	unsigned int uiObjectID;

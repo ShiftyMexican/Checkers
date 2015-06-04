@@ -4,18 +4,23 @@
 #include "Checkerboard.h"
 #include <iostream>
 
-Checkers::Checkers(GLFWwindow* window)
+Checkers::Checkers(GLFWwindow* window, ClientApplication* client)
 {
 	m_camera = new FreeCamera(window);
 	m_camera->SetupPerspective(glm::pi<float>() * 0.25f, 1240.0f / 768.0f);
-	m_camera->LookAt(vec3(0, 300, 0), vec3(80, 0, 80), vec3(0, 1, 0));
+	m_camera->LookAt(vec3(-90, 170, 80), vec3(80, 0, 80), vec3(0, 1, 0));
 	m_camera->SetFlySpeed(100.0f);
 
+	// if player 1 LookAt = (-90, 170, 80);
+	// if player 2 LookAt = (250, 170, 80);
 	m_window = window;
 
 	m_clicked = false;
 
-	m_checkerBoard = new Checkerboard(window);
+	m_checkerBoard = new Checkerboard(window, client);
+
+	client->SetCheckerBoard(m_checkerBoard);
+	
 }
 
 Checkers::~Checkers()

@@ -10,6 +10,7 @@ Description: Networking class to manage everything with my networking
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
 #include "Checkerboard.h"
+#include "BoardPiece.h"
 
 class ClientApplication
 {
@@ -28,7 +29,10 @@ public:
 
 	void ReadObjectDataFromServer(RakNet::BitStream& bsIn);
 
-	void CreateGameObject();
+	void SendMoveToServer(BoardPiece* tempBoardPiece);
+
+	void SetCheckerBoard(Checkerboard* board);
+
 private:
 
 	RakNet::RakPeerInterface* m_peerInterface;

@@ -6,6 +6,7 @@
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
 #include "BoardPiece.h"
+#include "Checkerboard.h"
 
 NetworkManager::NetworkManager()
 {
@@ -74,13 +75,8 @@ void NetworkManager::HandleNetworkMessages(RakNet::RakPeerInterface* pPeerInterf
 			RakNet::BitStream bsIn(packet->data, packet->length, false);
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			CreateObject(bsIn, packet->systemAddress);
-		} break;
 
-		case ID_SERVER_SEND_VALUES_TO_CLIENT:
-		{
-			
-		}
-			
+		} break;
 		default:
 			std::cout << "Received a message with an unknown ID. \n" << packet->data[0];
 			break;
@@ -135,21 +131,26 @@ unsigned int NetworkManager::SystemAddressToClientID(RakNet::SystemAddress& syst
 
 void NetworkManager::CreateObject(RakNet::BitStream& bsIn, RakNet::SystemAddress& ownerSystemAdress)
 {
-	BoardPiece* newBoardPiece = new BoardPiece(0, 1, 1, false, false);
+	BoardPiece newBoardPiece(0, 1, 1, false, false);
+	bool greenTurn;
 
-	bsIn.Read(newBoardPiece->m_id);
-	bsIn.Read(newBoardPiece->m_isGreen);
-	bsIn.Read(newBoardPiece->m_isGreenKing);
-	bsIn.Read(newBoardPiece->m_isPurple);
-	bsIn.Read(newBoardPiece->m_isPurpleKing);
-	bsIn.Read(newBoardPiece->m_isOccupied);
+	bsIn.Read(newBoardPiece.m_id);
+	bsIn.Read(newBoardPiece.m_isGreen);
+	bsIn.Read(newBoardPiece.m_isGreenKing);
+	bsIn.Read(newBoardPiece.m_isPurple);
+	bsIn.Read(newBoardPiece.m_isPurpleKing);
+	bsIn.Read(newBoardPiece.m_isOccupied);
+	bsIn.Read(greenTurn);
 	
-	newBoardPiece->uiOwnerClientID = SystemAddressToClientID(ownerSystemAdress);
-	newBoardPiece->uiObjectID = m_uiObjectCounter++;
+	newBoardPiece.uiOwnerClientID = SystemAddressToClientID(ownerSystemAdress);
+	newBoardPiece.uiObjectID = m_uiObjectCounter++;
+
+
+	SendObjectToAllClients(newBoardPiece, greenTurn, ownerSystemAdress);
 	
 }
 
-void NetworkManager::SendObjectToAllClients(BoardPiece& boardPiece, RakNet::SystemAddress systemAddress)
+void NetworkManager::SendObjectToAllClients(BoardPiece& boardPiece, bool greenTurn, RakNet::SystemAddress systemAddress)
 {
 	RakNet::BitStream bsOut;
 	bsOut.Write((RakNet::MessageID)ID_SERVER_FULL_OBJECT_DATA);
@@ -159,6 +160,12 @@ void NetworkManager::SendObjectToAllClients(BoardPiece& boardPiece, RakNet::Syst
 	bsOut.Write(boardPiece.m_isPurple);
 	bsOut.Write(boardPiece.m_isPurpleKing);
 	bsOut.Write(boardPiece.m_isOccupied);
+	bsOut.Write(greenTurn);
 
 	m_peerInterface->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemAddress, true);
+}
+
+void NetworkManager::SetCheckerBoard(Checkerboard* board)
+{
+	m_board = board;
 }

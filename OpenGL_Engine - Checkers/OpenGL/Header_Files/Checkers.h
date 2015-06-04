@@ -15,7 +15,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
-
+#include "ClientApplication.h"
 
 class Application;
 class FreeCamera;
@@ -24,14 +24,13 @@ class Checkers
 {
 public:
 
-	Checkers(GLFWwindow* window);
+	Checkers(GLFWwindow* window, ClientApplication* client);
 
 	~Checkers();
 
 	void Update(float deltaTime);
 
 	void Draw();
-
 
 private:
 
@@ -44,6 +43,8 @@ private:
 	glm::vec3 m_tempMousePos;
 
 	POINT mousepos;
+
+	ClientApplication* m_client;
 
 	bool m_clicked;
 

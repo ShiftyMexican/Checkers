@@ -19,6 +19,7 @@ BoardPiece::BoardPiece(int id, float xPos, float zPos, bool isBlack, bool occupi
 	m_isPossibleMove = false;
 	m_isPurpleKing = false;
 	m_isGreenKing = false;
+	m_sendMove = false;
 
 	m_position = glm::vec3(xPos, 1, zPos);
 

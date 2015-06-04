@@ -27,7 +27,6 @@ Application::Application()
 	myCamera->SetFlySpeed(1000.0f);
 	//---------------------------------------------------------------------------
 	
-	m_checkers = new Checkers(window);
 }
 
 // Destructor
@@ -120,11 +119,13 @@ void Application::Update()
 			m_isServer = false;
 			m_isActiveClient = true;
 			m_client = new ClientApplication();
+			m_checkers = new Checkers(window, m_client);
 		}
 		else if ((str[0] == 's') || (str[0] == 'S'))
 		{
 			m_isServer = true;
 			m_network = new NetworkManager();
+			//m_checkers = new Checkers(window, m_client);
 		}
 
 		if (m_isServer == true)
@@ -146,7 +147,7 @@ void Application::Update()
 
 	}
 
-	m_checkers->Update(deltaTime);
+	
 
 	if (m_isServer == true)
 	{
@@ -154,13 +155,18 @@ void Application::Update()
 	}
 
 	if (m_isActiveClient == true)
+	{
+		m_checkers->Update(deltaTime);
 		m_client->Update();
+	}
+	
 }
 
 // Draw Function
 void Application::Draw()
 {
-	m_checkers->Draw();
+	if (m_isActiveClient == true)
+		m_checkers->Draw();
 }
 
 // Load Shader Function

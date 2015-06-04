@@ -17,12 +17,13 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+class ClientApplication;
 class Checkers;
 class BoardPiece;
 class Checkerboard
 {
 public:
-	Checkerboard(GLFWwindow* window);
+	Checkerboard(GLFWwindow* window, ClientApplication* client);
 
 	~Checkerboard();
 
@@ -52,7 +53,7 @@ public:
 
 	std::vector<BoardPiece*> m_boardpieces;
 
-
+	bool m_greenTurn;
 private:
 	static const unsigned int BOARD_WIDTH = 8;
 
@@ -61,8 +62,6 @@ private:
 	glm::vec4 m_currentColour;
 
 	glm::vec3 m_boardPieceCenter;
-
-
 
 	float m_xOffset;
 	float m_yOffset;
@@ -79,11 +78,11 @@ private:
 	bool m_killPlus7;
 	bool m_killMinus9;
 	bool m_killPlus9;
-	bool m_greenTurn;
 	bool m_mustTake;
 	bool m_pieceTaken;
 
 	GLFWwindow* m_window;
+	ClientApplication* m_client;
 };
 
 #endif

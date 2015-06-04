@@ -12,6 +12,7 @@
 #include <vector>
 #include <unordered_map>
 #include "BoardPiece.h"
+#include "Checkerboard.h"
 
 class NetworkManager
 {
@@ -43,7 +44,9 @@ public:
 
 	void CreateObject(RakNet::BitStream& bsIn, RakNet::SystemAddress& ownerSystemAdress);
 
-	void SendObjectToAllClients(BoardPiece& boardPiece, RakNet::SystemAddress systemAddress);
+	void SendObjectToAllClients(BoardPiece& boardPiece, bool greenTurn, RakNet::SystemAddress systemAddress);
+
+	void SetCheckerBoard(Checkerboard* board);
 
 private:
 	struct ConnectionInfo
@@ -60,5 +63,6 @@ private:
 	std::vector<BoardPiece* > m_boardpieces;
 	unsigned int m_uiObjectCounter;
 	
+	Checkerboard* m_board;
 
 };

@@ -1,7 +1,8 @@
 #include "Checkerboard.h"
 #include "BoardPiece.h"
+#include "ClientApplication.h"
 
-Checkerboard::Checkerboard(GLFWwindow* window)
+Checkerboard::Checkerboard(GLFWwindow* window, ClientApplication* client)
 {
 	m_xOffset = 100;
 
@@ -33,6 +34,9 @@ Checkerboard::Checkerboard(GLFWwindow* window)
 	m_selectedPieceID = NULL;
 
 	CreateCheckersBoard();
+
+	m_client = client;
+
 }
 
 Checkerboard::~Checkerboard()
@@ -101,7 +105,6 @@ void Checkerboard::Update(glm::vec3 position)
 				if (m_mustTake == false)
 				{
 					m_selectedPieceID = NULL;
-					m_greenTurn = !m_greenTurn;
 				}
 			}
 			else
@@ -291,9 +294,12 @@ void Checkerboard::SetMove(BoardPiece* itr)
 	itr->m_isPurple = m_boardpieces[m_selectedPieceID]->m_isPurple;
 	itr->m_isGreenKing = m_boardpieces[m_selectedPieceID]->m_isGreenKing;
 	itr->m_isPurpleKing = m_boardpieces[m_selectedPieceID]->m_isPurpleKing;
+	itr->m_sendMove = true;
 	m_boardpieces[m_selectedPieceID]->m_isSelected = false;
 	m_boardpieces[m_selectedPieceID]->m_isOccupied = false;
+	m_boardpieces[m_selectedPieceID]->m_sendMove = true;
 	m_mustTake = false;
+	m_greenTurn = !m_greenTurn;
 
 	if (m_killMinus7 == true)
 	{
@@ -302,6 +308,7 @@ void Checkerboard::SetMove(BoardPiece* itr)
 		m_boardpieces[m_selectedPieceID - 7]->m_isPurple = false;
 		m_boardpieces[m_selectedPieceID - 7]->m_isGreenKing = false;
 		m_boardpieces[m_selectedPieceID - 7]->m_isPurpleKing = false;
+		m_boardpieces[m_selectedPieceID - 7]->m_sendMove = true;
 		m_killMinus7 = false;
 		m_pieceTaken = true;
 	}
@@ -313,6 +320,7 @@ void Checkerboard::SetMove(BoardPiece* itr)
 		m_boardpieces[m_selectedPieceID + 7]->m_isGreen = false;
 		m_boardpieces[m_selectedPieceID + 7]->m_isGreenKing = false;
 		m_boardpieces[m_selectedPieceID + 7]->m_isPurpleKing = false;
+		m_boardpieces[m_selectedPieceID + 7]->m_sendMove = true;
 		m_killPlus7 = false;
 		m_pieceTaken = true;
 	}
@@ -324,6 +332,7 @@ void Checkerboard::SetMove(BoardPiece* itr)
 		m_boardpieces[m_selectedPieceID - 9]->m_isPurple = false;
 		m_boardpieces[m_selectedPieceID - 9]->m_isGreenKing = false;
 		m_boardpieces[m_selectedPieceID - 9]->m_isPurpleKing = false;
+		m_boardpieces[m_selectedPieceID - 9]->m_sendMove = true;
 		m_killMinus9 = false;
 		m_pieceTaken = true;
 	}
@@ -335,6 +344,7 @@ void Checkerboard::SetMove(BoardPiece* itr)
 		m_boardpieces[m_selectedPieceID + 9]->m_isGreen = false;
 		m_boardpieces[m_selectedPieceID + 9]->m_isGreenKing = false;
 		m_boardpieces[m_selectedPieceID + 9]->m_isPurpleKing = false;
+		m_boardpieces[m_selectedPieceID + 9]->m_sendMove = true;
 		m_killPlus9 = false;
 		m_pieceTaken = true;
 	}
@@ -343,6 +353,12 @@ void Checkerboard::SetMove(BoardPiece* itr)
 	{
 		if ((*iter)->m_isPossibleMove == true)
 			(*iter)->m_isPossibleMove = false;
+
+		if ((*iter)->m_sendMove == true)
+		{
+			m_client->SendMoveToServer((*iter));
+			(*iter)->m_sendMove = false;
+		}
 	}	
 
 	GreenKingCheck(itr);
@@ -670,4 +686,3 @@ void Checkerboard::SetPurpleKingPossibleMoves(BoardPiece* itr)
 			m_boardpieces[(itr->m_id - 9)]->m_isPossibleMove = true;
 	}
 }
-
