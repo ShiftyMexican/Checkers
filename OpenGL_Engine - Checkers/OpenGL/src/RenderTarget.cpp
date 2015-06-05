@@ -1,8 +1,23 @@
 #include "RenderTarget.h"
+#include <stb_image.h>
 
 RenderTarget::RenderTarget(unsigned int programID)
 {
 	m_programID = programID;
+
+	int imageWidth = 0, imageHeight = 0, imageFormat = 0;
+
+	unsigned char* data = stbi_load("YourTurn.png", &imageWidth, &imageHeight, &imageFormat, STBI_default);
+
+	glGenTextures(1, &m_texture);
+	glBindTexture(GL_TEXTURE_2D, m_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	stbi_image_free(data);
 }
 
 RenderTarget::~RenderTarget()
@@ -14,16 +29,16 @@ void RenderTarget::Init()
 {
 	glGenFramebuffers(1, &m_fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-
+	
 	glGenTextures(1, &m_fboTexture);
 	glBindTexture(GL_TEXTURE_2D, m_fboTexture);
-
+	
 	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1240, 768);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
+	
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_fboTexture, 0);
-
+	
 	glGenRenderbuffers(1, &m_fboDepth);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_fboDepth);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 1240, 768);
@@ -43,8 +58,8 @@ void RenderTarget::Init()
 
 	float vertexData[] =
 	{
-		-1, -1, -1, 1, 0, 0,
-		 1, -1, -1, 1, 1, 0,
+		-1, 0.55, -1, 1, 0, 0,
+		 1, 0.55, -1, 1, 1, 0,
 		 1, 1, -1, 1, 1, 1,
 		-1, 1, -1, 1, 0, 1,
 
@@ -89,8 +104,14 @@ void RenderTarget::Draw()
 	glBindTexture(GL_TEXTURE_2D, m_fboTexture);
 	glUniform1i(glGetUniformLocation(m_programID, "diffuse"), 0);
 
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_texture);
+	unsigned int loc1 = glGetUniformLocation(m_programID, "myTexture");
+	glUniform1i(loc1, 1);
+
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	glBindVertexArray(0);
 	glClearColor(0, 0, 0, 1);
 }
 
@@ -99,7 +120,7 @@ void RenderTarget::SetAsActiveRenderTarget()
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 	glViewport(0, 0, 1240, 768);
 
-	glClearColor(0, 0, 0, 0);// , );
+	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

@@ -119,7 +119,7 @@ void Application::Update()
 			m_isServer = false;
 			m_isActiveClient = true;
 			m_client = new ClientApplication();
-			m_checkers = new Checkers(window, m_client);
+			m_checkers = new Checkers(this, window, m_client);
 		}
 		else if ((str[0] == 's') || (str[0] == 'S'))
 		{

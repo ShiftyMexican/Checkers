@@ -33,12 +33,14 @@ public:
 
 	void SetCheckerBoard(Checkerboard* board);
 
+	unsigned int m_uiClientID;
+
 private:
 
 	RakNet::RakPeerInterface* m_peerInterface;
 	Checkerboard* m_board;
 
-	unsigned int m_uiClientID;
+	
 
 	const char* IP = "127.0.0.1";
 	const unsigned short PORT = 5456;

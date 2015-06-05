@@ -5,6 +5,7 @@ in vec2 vTexCoord;
 out vec4 FragColor;
 
 uniform sampler2D diffuse;
+uniform sampler2D myTexture;
 
 vec4 Simple()
 {
@@ -44,5 +45,9 @@ vec4 Distort()
 
 void main()
 {
-	FragColor = Simple();
+	vec4 yourTurn;
+
+	yourTurn = texture(myTexture, vTexCoord);
+
+	FragColor = yourTurn;
 };

@@ -47,6 +47,7 @@ protected:
 
 	unsigned int m_programID;
 
+	unsigned int m_texture;
 private:
 
 };

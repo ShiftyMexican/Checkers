@@ -16,6 +16,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "ClientApplication.h"
+#include "RenderTarget.h"
 
 class Application;
 class FreeCamera;
@@ -24,13 +25,15 @@ class Checkers
 {
 public:
 
-	Checkers(GLFWwindow* window, ClientApplication* client);
+	Checkers(Application* app, GLFWwindow* window, ClientApplication* client);
 
 	~Checkers();
 
 	void Update(float deltaTime);
 
 	void Draw();
+
+	unsigned int m_programID;
 
 private:
 
@@ -46,7 +49,13 @@ private:
 
 	ClientApplication* m_client;
 
+	Application* m_application;
+
+	RenderTarget* m_renderTarget;
+
 	bool m_clicked;
+
+	bool m_lookAtWasSet;
 
 };
 

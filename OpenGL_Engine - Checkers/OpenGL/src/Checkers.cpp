@@ -3,24 +3,32 @@
 #include "FreeCamera.h"
 #include "Checkerboard.h"
 #include <iostream>
+#include "Application.h"
 
-Checkers::Checkers(GLFWwindow* window, ClientApplication* client)
+Checkers::Checkers(Application* app, GLFWwindow* window, ClientApplication* client)
 {
 	m_camera = new FreeCamera(window);
 	m_camera->SetupPerspective(glm::pi<float>() * 0.25f, 1240.0f / 768.0f);
-	m_camera->LookAt(vec3(-90, 170, 80), vec3(80, 0, 80), vec3(0, 1, 0));
 	m_camera->SetFlySpeed(100.0f);
 
-	// if player 1 LookAt = (-90, 170, 80);
-	// if player 2 LookAt = (250, 170, 80);
 	m_window = window;
 
 	m_clicked = false;
 
 	m_checkerBoard = new Checkerboard(window, client);
 
+	m_client = client;
+
 	client->SetCheckerBoard(m_checkerBoard);
+
+	m_lookAtWasSet = false;	
+
+	m_application = app;
 	
+	m_programID = m_application->HandleShader("RenderTarget.vert", "RenderTarget.frag", 0);
+
+	m_renderTarget = new RenderTarget(m_programID);
+	m_renderTarget->Init();
 }
 
 Checkers::~Checkers()
@@ -39,6 +47,23 @@ void Checkers::Update(float deltaTime)
 		m_tempMousePos = Tileloc;
 	}
 
+	if (m_lookAtWasSet == false)
+	{
+		if (m_client->m_uiClientID == 1)
+		{
+			m_camera->LookAt(vec3(-90, 170, 80), vec3(80, 0, 80), vec3(0, 1, 0));
+			m_lookAtWasSet = true;
+		}
+			
+		else if (m_client->m_uiClientID == 2)
+		{
+			m_camera->LookAt(vec3(250, 170, 80), vec3(80, 0, 80), vec3(0, 1, 0));
+			m_lookAtWasSet = true;
+		}
+			
+	}
+
+
 	m_camera->Update(deltaTime);
 	m_checkerBoard->Update(m_tempMousePos);
 
@@ -53,6 +78,8 @@ void Checkers::Draw()
 	Gizmos::clear();
 
 	m_checkerBoard->Draw();
+
+	m_renderTarget->Draw();
 
 	Gizmos::draw(m_camera->GetProjectionView());
 }
