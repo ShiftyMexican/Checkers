@@ -79,7 +79,7 @@ void Checkers::Draw()
 
 	m_checkerBoard->Draw();
 
-	m_renderTarget->Draw();
+	//m_renderTarget->Draw();
 
 	Gizmos::draw(m_camera->GetProjectionView());
 }

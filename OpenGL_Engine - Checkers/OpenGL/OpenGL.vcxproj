@@ -71,7 +71,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CONSOLE;GLM_SWIZZLE;GLM_FORCE_PURE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./dep/glfw/include;./dep/glm;./dep/aieutilities;./src;./Header_Files;./dep/stb-master;./dep/AntTweakBar/include;./dep/RackNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./dep/glfw/include;./dep/glm;./dep/aieutilities;./src;./Header_Files;./dep/stb-master;./dep/AntTweakBar/include;./dep/RackNet/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

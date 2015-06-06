@@ -114,6 +114,8 @@ void NetworkManager::RemoveConnection(RakNet::SystemAddress systemAddress)
 			break;
 		}
 	}
+
+	m_uiConnectionCounter -= 1;
 }
 
 unsigned int NetworkManager::SystemAddressToClientID(RakNet::SystemAddress& systemAddress)
