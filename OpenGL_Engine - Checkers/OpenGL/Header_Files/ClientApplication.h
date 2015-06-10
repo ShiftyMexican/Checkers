@@ -37,6 +37,7 @@ public:
 
 	bool m_yourTurn;
 	bool m_yourTurn2;
+	const char* IP;
 
 private:
 
@@ -45,7 +46,7 @@ private:
 
 	
 
-	const char* IP = "127.0.0.1";
+
 	const unsigned short PORT = 5456;
 
 };

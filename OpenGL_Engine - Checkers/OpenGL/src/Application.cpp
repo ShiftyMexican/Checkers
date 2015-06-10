@@ -139,8 +139,11 @@ void Application::Update()
 
 			if (str[0] == 0)
 			{
-				strcpy(str, "127.0.0.1");
+				m_client->IP = strcpy(str, "127.0.0.1");
 			}
+
+			m_client->IP = str;
+
 			printf("starting the Client. \n");
 			m_client->HandleNetworkConnection();
 		}
