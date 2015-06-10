@@ -34,6 +34,11 @@ public:
 
 	void ClearActiveRenderTarget();
 
+	bool yourTurn;
+	bool youWin;
+	bool youWin2;
+	bool youLose;
+	bool youLose2;
 
 protected:
 
@@ -48,6 +53,9 @@ protected:
 	unsigned int m_programID;
 
 	unsigned int m_texture;
+	unsigned int m_texture2;
+	unsigned int m_texture3;
+
 private:
 
 };

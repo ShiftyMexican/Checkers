@@ -5,7 +5,9 @@
 
 ClientApplication::ClientApplication() 
 {
-	
+	m_yourTurn = true;
+	m_yourTurn2 = false;
+
 }
 
 ClientApplication::~ClientApplication()
@@ -15,6 +17,29 @@ ClientApplication::~ClientApplication()
 void ClientApplication::Update()
 {
 	HandleNetworkMessgaes(m_peerInterface);
+
+	if (m_uiClientID > 0)
+	{
+		if (m_uiClientID == 1)
+		{
+			if (m_board->m_greenTurn == true)
+			{
+				m_yourTurn = true;
+				m_yourTurn2 = false;
+			}
+		}
+
+		if (m_uiClientID == 2)
+		{
+			if (m_board->m_greenTurn == false)
+			{
+				m_yourTurn2 = true;
+				m_yourTurn = false;
+			}
+			
+		}
+
+	}
 }
 
 // Initialize the connection

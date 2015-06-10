@@ -51,13 +51,13 @@ void Checkers::Update(float deltaTime)
 	{
 		if (m_client->m_uiClientID == 1)
 		{
-			m_camera->LookAt(vec3(-90, 170, 80), vec3(80, 0, 80), vec3(0, 1, 0));
+			m_camera->LookAt(vec3(-120, 170, 80), vec3(80, -50, 80), vec3(0, 1, 0));
 			m_lookAtWasSet = true;
 		}
 			
 		else if (m_client->m_uiClientID == 2)
 		{
-			m_camera->LookAt(vec3(250, 170, 80), vec3(80, 0, 80), vec3(0, 1, 0));
+			m_camera->LookAt(vec3(280, 170, 80), vec3(80, -50, 80), vec3(0, 1, 0));
 			m_lookAtWasSet = true;
 		}
 			
@@ -71,6 +71,21 @@ void Checkers::Update(float deltaTime)
 		m_clicked = true;
 	else
 		m_clicked = false;
+
+
+	if (m_checkerBoard->m_greenPiecesLeft == 0)
+	{
+		m_renderTarget->youWin = true;
+	}
+	else if (m_checkerBoard->m_purplePiecesLeft == 0)
+	{
+		m_renderTarget->youWin2 = true;
+	}
+
+	else if (m_client->m_yourTurn == true || m_client->m_yourTurn2 == true)
+	{
+		m_renderTarget->yourTurn = true;
+	}
 }
 
 void Checkers::Draw()
@@ -78,8 +93,24 @@ void Checkers::Draw()
 	Gizmos::clear();
 
 	m_checkerBoard->Draw();
+	
+	if (m_client->m_uiClientID == 1 && m_client->m_yourTurn == true)
+	{
+		m_renderTarget->Draw();
+	}
+	else if (m_client->m_uiClientID == 2 && m_client->m_yourTurn2 == true)
+	{
+		m_renderTarget->Draw();
+	}
 
-	//m_renderTarget->Draw();
-
+	if (m_client->m_uiClientID == 1 && m_checkerBoard->m_purplePiecesLeft == 0)
+	{
+		m_renderTarget->Draw();
+	}
+	else if (m_client->m_uiClientID == 2 && m_checkerBoard->m_greenPiecesLeft == 0)
+	{
+		m_renderTarget->Draw();
+	}
+	
 	Gizmos::draw(m_camera->GetProjectionView());
 }

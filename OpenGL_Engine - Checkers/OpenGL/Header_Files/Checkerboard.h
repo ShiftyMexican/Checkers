@@ -54,6 +54,10 @@ public:
 	std::vector<BoardPiece*> m_boardpieces;
 
 	bool m_greenTurn;
+
+	int m_purplePiecesLeft;
+	int m_greenPiecesLeft;
+
 private:
 	static const unsigned int BOARD_WIDTH = 8;
 

@@ -35,6 +35,9 @@ public:
 
 	unsigned int m_uiClientID;
 
+	bool m_yourTurn;
+	bool m_yourTurn2;
+
 private:
 
 	RakNet::RakPeerInterface* m_peerInterface;

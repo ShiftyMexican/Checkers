@@ -37,6 +37,9 @@ Checkerboard::Checkerboard(GLFWwindow* window, ClientApplication* client)
 
 	m_client = client;
 
+	m_greenPiecesLeft = 12;
+	m_purplePiecesLeft = 12;
+
 }
 
 Checkerboard::~Checkerboard()
@@ -94,11 +97,18 @@ void Checkerboard::Update(glm::vec3 position)
 				if (m_pieceTaken == true)
 				{
 					if ((*itr)->m_isPurple == true)
+					{
+						m_greenPiecesLeft -= 1;
 						CheckForGreenKill((*itr));
+					}
+						
 
 					else if ((*itr)->m_isGreen == true)
+					{
+						m_purplePiecesLeft -= 1;
 						CheckForPurpleKill((*itr));
-
+					}
+						
 					m_pieceTaken = false;
 					
 				}
@@ -304,10 +314,12 @@ void Checkerboard::SetMove(BoardPiece* itr)
 	if (itr->m_isGreen == true || itr->m_isGreenKing == true)
 	{
 		m_greenTurn = false;
+		m_client->m_yourTurn = false;
 	}
 	else if (itr->m_isPurple == true || itr->m_isPurpleKing == true)
 	{
 		m_greenTurn = true;
+		m_client->m_yourTurn2 = false;
 	}
 	
 
