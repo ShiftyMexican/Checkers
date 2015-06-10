@@ -50,7 +50,7 @@ Checkerboard::~Checkerboard()
 void Checkerboard::Update(glm::vec3 position)
 {
 	for (auto itr = m_boardpieces.begin(); itr != m_boardpieces.end(); itr++)
-	{
+	{		
 		if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && m_clicked != true &&
 			position.x <= (*itr)->m_position.x + 10 && position.x >= (*itr)->m_position.x - 10 && 
 			position.z <= (*itr)->m_position.z + 10 && position.z >= (*itr)->m_position.z - 10)
